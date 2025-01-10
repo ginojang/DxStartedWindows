@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Win32">
+      <UniqueIdentifier>{799576c0-f89e-4f6c-b855-fb718abf2059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32\리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="legacyCore">
+      <UniqueIdentifier>{8de98cab-93c3-4ced-9383-cd152189923f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="MoobWin32.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="freeImage\FreeImage.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\EFCknl.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\EFCmain.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\EFCpixel.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\Inflater3.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\ABMReader.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\EFCfnt.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\EFCfs.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\EFCgrp.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\EFCimg.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\EFCkey.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\EFCthr.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\ResourceManager.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\LoopCore.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+    <ClInclude Include="legacyCore\LegacyCore.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MoobWin32.rc">
+      <Filter>Win32\리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Win32\리소스 파일</Filter>
+    </Image>
+    <Image Include="MoobWin32.ico">
+      <Filter>Win32\리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MoobWin32.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\EFCknl.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\EFCmain.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\EFCmem.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\EFCpixel.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\Inflater3.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\ABMReader.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\EFCfnt.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\EFCfs.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\EFCgrp.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\EFCimg.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\EFCkey.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\EFCthr.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\ResourceManager.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\LoopCore.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
