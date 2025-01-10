@@ -3,18 +3,13 @@
 
 	#define DF_MEM_COUNT 30000
 
-	typedef struct tagEXMEMDATA {
+	typedef struct tagEXMEMDATA 
+	{
 		EXBUFF				xBuffs[DF_MEM_COUNT];
 
-		sint32				nTOTAL;
-		sint32				nFREE;
-		sint32				nCURR;
-		sint32				nUSEDMEM;
-
-		sint32				bLOCK;
-
-		sint32				nALLOC;
 	} EXMEMDATA, *LPEXMEMDATA;
+
+
 	extern EXMEMDATA MemData;
 
 	extern void EFC_memInitialize( void );

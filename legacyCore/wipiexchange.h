@@ -27,8 +27,6 @@
 #define MC_MdaClip															EX_MdaClip
 
 #define MC_GrpFrameBuffer													EX_GrpFrameBuffer
-#define MC_knlAlloc															EX_knlAlloc
-#define MC_knlFree															EX_knlFree
 
 // GINO CHECK
 //#define MC_knlGetResourceID													EX_knlGetResourceID

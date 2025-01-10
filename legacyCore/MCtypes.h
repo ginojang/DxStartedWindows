@@ -26,11 +26,11 @@ extern "C" {
 /* WIPI Specification */
 
 typedef		unsigned	char			M_Boolean;
-typedef		unsigned	long			M_Uint32;	
+typedef		unsigned	int				M_Uint32;	
 typedef		unsigned	short			M_Uint16;
 typedef		unsigned	char			M_Uint8;
 
-typedef		signed		long			M_Int32;	
+typedef		signed		int				M_Int32;	
 typedef		signed		short			M_Int16;
 typedef		signed		char			M_Int8;
 
@@ -46,7 +46,7 @@ typedef		unsigned	long long		M_Uint64;
 #endif
 
 typedef		unsigned	short			M_UCode;
-typedef		signed		long			M_Sint32;   
+typedef		signed		int			M_Sint32;   
 typedef		signed		short			M_Sint15;
 
 typedef		M_Uint32					M_Addr;		

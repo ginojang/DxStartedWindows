@@ -11,6 +11,11 @@
 
 #include "freeImage/FreeImage.h"
 
+//
+#include "legacyCore/wipiproc.h"
+#include "legacyCore/MCtypes.h"
+#include "legacyCore/Extype.h"
+#include "legacyCore/LoopCore.h"
 
 
 #define MAX_LOADSTRING 100
@@ -37,11 +42,11 @@ ID2D1Bitmap* gp_bitmap;
 D2D1_RECT_F g_ScreenRectf;
 //D2D1_RECT_U g_ScreenRectu;
 
-
+extern LoopCore g_loopCore;
 
 /////////////////////////////////////////////////////
 //
-DWORD* g_pBuffers = NULL;
+UINT* g_pBuffers = NULL;
 
 int SCREEN_WIDTH = 640;
 int SCREEN_HEIGHT = 480;
@@ -189,13 +194,13 @@ void Start()
 
         //if (pixelFormat.format == DXGI_FORMAT_B8G8R8A8_UNORM)
 
-        g_pBuffers = new DWORD[pixel_size.width * pixel_size.height];
+        g_pBuffers = new UINT[pixel_size.width * pixel_size.height];
     }
     
 
     ///////////////////////////////////////////////////////////
     //
-
+    g_loopCore.Start(g_pBuffers, SCREEN_WIDTH, SCREEN_HEIGHT);
     //
     ///////////////////////////////////////////////////////////
 }
@@ -206,7 +211,7 @@ void FixedUpdate()
 
     ///////////////////////////////////////////////////////////
     //
-
+    g_loopCore.FixedUpdate(timer);
     //
     ///////////////////////////////////////////////////////////
 }
@@ -216,10 +221,11 @@ void UpdateBuffer()
 {
     ///////////////////////////////////////////////////////////
     //
-
+    g_loopCore.Update();
     //
     ///////////////////////////////////////////////////////////
 
+    /*
     for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++)
     {
         unsigned char* color = (unsigned char*)(g_pBuffers + i);
@@ -228,7 +234,7 @@ void UpdateBuffer()
         *(color + 1) = 10;       //g
         *(color + 2) = 50;     //b
         *(color + 3) = 255;
-    }
+    }*/
 }
 
 
@@ -241,7 +247,7 @@ void Update()
     {
         //
         D2D1_RECT_U rect;
-        gp_bitmap->CopyFromMemory(NULL, g_pBuffers, SCREEN_WIDTH * sizeof(DWORD));
+        gp_bitmap->CopyFromMemory(NULL, g_pBuffers, SCREEN_WIDTH * sizeof(UINT));
         g_pRenderTarget->DrawBitmap(gp_bitmap, &g_ScreenRectf);
         
     }
@@ -255,7 +261,7 @@ void Close()
 {
     ///////////////////////////////////////////////////////////
     //
-
+    g_loopCore.Close();
     //
     ///////////////////////////////////////////////////////////
 

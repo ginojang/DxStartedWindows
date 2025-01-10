@@ -91,6 +91,9 @@
     <ClInclude Include="legacyCore\ResourceManager.h">
       <Filter>legacyCore</Filter>
     </ClInclude>
+    <ClInclude Include="legacyCore\LoopCore.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MoobWin32.rc">
@@ -152,6 +155,12 @@
       <Filter>legacyCore</Filter>
     </ClCompile>
     <ClCompile Include="legacyCore\ResourceManager.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\소스.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\LoopCore.cpp">
       <Filter>legacyCore</Filter>
     </ClCompile>
   </ItemGroup>

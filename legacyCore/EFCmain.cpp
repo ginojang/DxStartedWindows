@@ -10,12 +10,8 @@
 #include "EFCfnt.h"
 #include "EFCmda.h"
 
-
 EXMAINDATA MainData;
 
-#if defined( USE_DEBUG_MESSAGE )
-	void EFC_mainDEBUG( void );
-#endif
 
 void EFC_mainInitialize( void )
 {
@@ -23,12 +19,6 @@ void EFC_mainInitialize( void )
 
 	MainData.isDebugDraw = FALSE;
 
-#if defined(NET_MODE)
-	Comm_Link();
-	#if defined(KT_WIPI)
-		Comm_onDllLoading();
-	#endif
-#endif
 
 	// 아래 순서 바꾸지 말자
 	EFC_memInitialize();
@@ -54,7 +44,7 @@ void EFC_mainInitialize( void )
 	EFC_memReset();
 
 	/// 쓰레드 실행
-	EFC_thrPLAY();
+	//EFC_thrPLAY();
 
 }
 
@@ -125,47 +115,7 @@ void EFC_mainKeyPRESS( sint32 nKEY )
 	}
 
 	MainData.nKEY = nKEY;
-
-#if defined( USE_TOUCH_PROC )
-	//Logo.touchKey = nKEY;
-	//Logo.touchPress = TRUE;
-	//Logo.touchPressCnt = 0;
-#endif
-
-#if defined( USE_DEBUG_MESSAGE )
-	ThreadData.nDIFFs = 0;
-	ThreadData.nDIFFCnt = 0;
-#endif
-
-	switch( nKEY ) {
-	case KEY_QUIT :
-		MainData.nEXIT = 1;
-		return;
-	// 자체 볼륨키로만 볼륨이 설정되는 단말기 존재
-	case KEY_VOLUME_UP :
-		//EFC_mdaVOLUME(1);
-		break;
-	case KEY_VOLUME_DOWN :
-		//EFC_mdaVOLUME(-1);
-		break;
-	default : 
-		break;
-	}
-
-#if defined( USE_DEBUG_MESSAGE )
-	#if defined(RELEASE)
-		#if defined(USE_TOUCH_PROC)
-			if(nKEY == KEY_SEND)
-		#else
-			if(nKEY == KEY_SOFT2)
-		#endif
-	#else
-		if(nKEY == KEY_SOFT2)	
-	#endif
-
-	MainData.isDebugDraw = !MainData.isDebugDraw;
-#endif
-
+	
 	EFC_keyADD( MainData.nKEY );
 }
 

@@ -165,6 +165,7 @@
     <ClInclude Include="legacyCore\EXdefault.h" />
     <ClInclude Include="legacyCore\EXtype.h" />
     <ClInclude Include="legacyCore\Inflater3.h" />
+    <ClInclude Include="legacyCore\LoopCore.h" />
     <ClInclude Include="legacyCore\MCerror.h" />
     <ClInclude Include="legacyCore\MCtypes.h" />
     <ClInclude Include="legacyCore\ResourceManager.h" />
@@ -189,7 +190,9 @@
     <ClCompile Include="legacyCore\EFCpixel.cpp" />
     <ClCompile Include="legacyCore\EFCthr.cpp" />
     <ClCompile Include="legacyCore\Inflater3.cpp" />
+    <ClCompile Include="legacyCore\LoopCore.cpp" />
     <ClCompile Include="legacyCore\ResourceManager.cpp" />
+    <ClCompile Include="legacyCore\소스.cpp" />
     <ClCompile Include="MoobWin32.cpp" />
   </ItemGroup>
   <ItemGroup>

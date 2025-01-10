@@ -22,19 +22,26 @@ EXBUFF* ResourceManager::LoadFromAssets(const char* pszName)
 {
 
 	return NULL;
+
+}
+
+uint32 ResourceManager::AllocBuffer(int size)
+{
+	
+	return 0;
+}
+
+void ResourceManager::ReleaseBuffer(uint32 index)
+{
+
 }
 
 
 //
-M_Uint32 EX_knlAlloc(M_Int32 size)
-{
+M_Uint32 EX_knlAlloc(M_Int32 size)	{	return g_resourceManager.AllocBuffer(size);		}
 
-	return 0;
-}
-void EX_knlFree(M_Uint32 mID)
-{
+void EX_knlFree(M_Uint32 mID) { return g_resourceManager.ReleaseBuffer(mID);	 }
 
-}
 M_Int32 EX_knlGetTotalMemory()
 {
 	return 0;

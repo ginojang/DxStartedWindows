@@ -1,5 +1,6 @@
 #pragma once
 
+
 class ResourceManager
 {
 public:
@@ -7,8 +8,10 @@ public:
 	~ResourceManager();
 
 
+public:
 	EXBUFF* LoadFromAssets(const char* pszName);
-
+	uint32 AllocBuffer(int size);
+	void ReleaseBuffer(uint32 index);
 };
 
 

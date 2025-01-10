@@ -72,7 +72,7 @@ void EFC_fntInitialize( void )
 
 	FontData.hBack = MC_grpCreateOffScreenFrameBuffer( FontData.nW + 2, FontData.nH + 2 );
 	
-	MemData.bLOCK = TRUE;
+	//MemData.bLOCK = TRUE;
 
 	EFC_fntSetRGB( 1, RGB(0,255,255) );//비취색
 	EFC_fntSetRGB( 2, RGB(255,153,204) );//분홍색
@@ -91,7 +91,7 @@ void EFC_fntFinalize( void )
 {
 	if( FontData.hBack != 0 ) {
 		MC_grpDestroyOffScreenFrameBuffer( FontData.hBack );
-		MemData.bLOCK = TRUE;
+		//MemData.bLOCK = TRUE;
 	}
 
 	EFC_memFREE( FontData.pPAL );
