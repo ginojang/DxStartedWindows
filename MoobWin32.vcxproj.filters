@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Win32">
+      <UniqueIdentifier>{799576c0-f89e-4f6c-b855-fb718abf2059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32\리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="MoobWin32.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="freeImage\FreeImage.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MoobWin32.rc">
+      <Filter>Win32\리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Win32\리소스 파일</Filter>
+    </Image>
+    <Image Include="MoobWin32.ico">
+      <Filter>Win32\리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MoobWin32.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
