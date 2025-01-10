@@ -122,7 +122,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SKT_WIPI;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -136,7 +136,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SKT_WIPI;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -149,11 +149,47 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="freeImage\FreeImage.h" />
+    <ClInclude Include="legacyCore\ABMReader.h" />
+    <ClInclude Include="legacyCore\Comm.h" />
+    <ClInclude Include="legacyCore\EFCfnt.h" />
+    <ClInclude Include="legacyCore\EFCfs.h" />
+    <ClInclude Include="legacyCore\EFCgrp.h" />
+    <ClInclude Include="legacyCore\EFCimg.h" />
+    <ClInclude Include="legacyCore\EFCkey.h" />
+    <ClInclude Include="legacyCore\EFCknl.h" />
+    <ClInclude Include="legacyCore\EFCmain.h" />
+    <ClInclude Include="legacyCore\EFCmda.h" />
+    <ClInclude Include="legacyCore\EFCmem.h" />
+    <ClInclude Include="legacyCore\EFCpixel.h" />
+    <ClInclude Include="legacyCore\EFCthr.h" />
+    <ClInclude Include="legacyCore\EXdefault.h" />
+    <ClInclude Include="legacyCore\EXtype.h" />
+    <ClInclude Include="legacyCore\Inflater3.h" />
+    <ClInclude Include="legacyCore\MCerror.h" />
+    <ClInclude Include="legacyCore\MCtypes.h" />
+    <ClInclude Include="legacyCore\ResourceManager.h" />
+    <ClInclude Include="legacyCore\wipiexchange.h" />
+    <ClInclude Include="legacyCore\wipiproc.h" />
     <ClInclude Include="MoobWin32.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="legacyCore\ABMReader.cpp" />
+    <ClCompile Include="legacyCore\Comm.cpp" />
+    <ClCompile Include="legacyCore\EFCfnt.cpp" />
+    <ClCompile Include="legacyCore\EFCfs.cpp" />
+    <ClCompile Include="legacyCore\EFCgrp.cpp" />
+    <ClCompile Include="legacyCore\EFCimg.cpp" />
+    <ClCompile Include="legacyCore\EFCkey.cpp" />
+    <ClCompile Include="legacyCore\EFCknl.cpp" />
+    <ClCompile Include="legacyCore\EFCmain.cpp" />
+    <ClCompile Include="legacyCore\EFCmda.cpp" />
+    <ClCompile Include="legacyCore\EFCmem.cpp" />
+    <ClCompile Include="legacyCore\EFCpixel.cpp" />
+    <ClCompile Include="legacyCore\EFCthr.cpp" />
+    <ClCompile Include="legacyCore\Inflater3.cpp" />
+    <ClCompile Include="legacyCore\ResourceManager.cpp" />
     <ClCompile Include="MoobWin32.cpp" />
   </ItemGroup>
   <ItemGroup>

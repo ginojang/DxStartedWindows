@@ -224,9 +224,9 @@ void UpdateBuffer()
     {
         unsigned char* color = (unsigned char*)(g_pBuffers + i);
 
-        *(color + 0) = 255;     //r
-        *(color + 1) = 0;       //g
-        *(color + 2) = 255;     //b
+        *(color + 0) = 10;     //r
+        *(color + 1) = 10;       //g
+        *(color + 2) = 50;     //b
         *(color + 3) = 255;
     }
 }
@@ -243,6 +243,7 @@ void Update()
         D2D1_RECT_U rect;
         gp_bitmap->CopyFromMemory(NULL, g_pBuffers, SCREEN_WIDTH * sizeof(DWORD));
         g_pRenderTarget->DrawBitmap(gp_bitmap, &g_ScreenRectf);
+        
     }
     else
         g_pRenderTarget->Clear(D2D1::ColorF(0.0f, 20.0f, 0.0f));
