@@ -267,6 +267,13 @@ enum {
 	EN_MIX = 0x00000003
 };
 
+enum {
+	EN_MIRROR_NONE = 0,
+	EN_MIRROR_HORIZON,
+	EN_MIRROR_VERTICAL,
+	EN_MIRROR_BOTH,
+	EN_MIRROR_LAST
+};
 
 typedef struct tagEXIMAGE 
 {

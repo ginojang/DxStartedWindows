@@ -4,13 +4,10 @@
 #include "LegacyFilterProcs.h"
 
 #include "EFCfnt.h"
-#include "EFCimg.h"
 
 
 LegacyDrawer g_legacyDrawer;
-
 PIXELDATA PixelData;
-
 
 
 LegacyDrawer::LegacyDrawer()
