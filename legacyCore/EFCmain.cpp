@@ -4,7 +4,6 @@
 #include "EFCkey.h"
 #include "EFCpixel.h"
 #include "EFCgrp.h"
-#include "EFCthr.h"
 #include "EFCfs.h"
 #include "EFCfnt.h"
 
@@ -26,7 +25,7 @@ void EFC_mainInitialize( void )
 	//
 	EFC_pxlInitialize();
 
-	EFC_thrInitialize(); 
+	
 	
 	//
 #if _CHECK
@@ -57,7 +56,6 @@ void EFC_mainFinalize( void )
 	EFC_lnkFinalize();
 #endif
 	//
-	EFC_thrFinalize();
 	EFC_grpFinalize();
 	//
 	

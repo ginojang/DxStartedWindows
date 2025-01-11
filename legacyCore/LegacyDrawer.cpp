@@ -44,8 +44,8 @@ sint32 LegacyDrawer::GetBplWithWidth(sint32 width, sint32 bpp)
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// 기존 게임 소스 동작을 하기 위한 - 직접 호출 - 함수 - 
-
+/// 기존 게임 소스 동작을 하기 위한 - 직접 호출 - 함수 -  >>> 작업 끝나고 LegacyCore.cpp 로 이동 예정
+ 
 M_Int32 MC_grpCreateOffScreenFrameBuffer(M_Int32 w, M_Int32 h)
 {
 	return 0;

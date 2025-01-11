@@ -1,7 +1,6 @@
 #include "LegacyCore.h"
 #include "EFCkey.h"
 
-#include "EFCthr.h"
 
 
 // EFCkey.c
@@ -49,10 +48,13 @@ sint32 EFC_keyGetDASH( sint32 nKEY, ubool bMODIFY )
 	nZERO = ((KeyData.nPOS + KEY_BUFFS - 2) % KEY_BUFFS);
 	nCURR = ((KeyData.nPOS + KEY_BUFFS - 1) % KEY_BUFFS);
 
+#if _CHECK
 	nDIFF = (sint32)(ThreadData.nCURR - KeyData.nTIMES[nPREV]);
+
 	if( (nDIFF > 500) || (KeyData.nKEYS[nZERO] != 0) ) {
 		return KEY_NULL;
 	}
+#endif
 
 	if( bMODIFY == TRUE ) {
 		if( (nKEY == EFC_keyMODIFY( KeyData.nKEYS[nPREV] )) && (nKEY == EFC_keyMODIFY( KeyData.nKEYS[nCURR] )) ) {
@@ -69,12 +71,14 @@ sint32 EFC_keyGetDASH( sint32 nKEY, ubool bMODIFY )
 
 sint32 EFC_keyLastTIMES( void )
 {
-	return (sint32)(ThreadData.nCURR - KeyData.nTIMES[ ((KeyData.nPOS + KeyData.nCOUNT) % KEY_BUFFS) ]);
+	return 0;
+	//return (sint32)(ThreadData.nCURR - KeyData.nTIMES[ ((KeyData.nPOS + KeyData.nCOUNT) % KEY_BUFFS) ]);
 }
 
 sint32 EFC_keyTIMES( void )
 {
-	return (sint32)(ThreadData.nCURR - KeyData.nTIMES[ ((KeyData.nPOS + KeyData.nCOUNT - 1) % KEY_BUFFS) ]);
+	return 0;
+	//return (sint32)(ThreadData.nCURR - KeyData.nTIMES[ ((KeyData.nPOS + KeyData.nCOUNT - 1) % KEY_BUFFS) ]);
 }
 
 ubool EFC_keyIsREPEAT( void )
@@ -134,7 +138,7 @@ void EFC_keyADD( sint32 nKEY )
 
 	KeyData.nKEY = nKEY;
 	KeyData.nKEYS[nPOS] = nKEY;
-	KeyData.nTIMES[nPOS] = ThreadData.nCURR;
+	//KeyData.nTIMES[nPOS] = ThreadData.nCURR;
 }
 
 void EFC_keyReset( void )

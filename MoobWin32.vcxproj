@@ -158,7 +158,6 @@
     <ClInclude Include="legacyCore\EFCknl.h" />
     <ClInclude Include="legacyCore\EFCmain.h" />
     <ClInclude Include="legacyCore\EFCpixel.h" />
-    <ClInclude Include="legacyCore\EFCthr.h" />
     <ClInclude Include="legacyCore\Inflater3.h" />
     <ClInclude Include="legacyCore\LegacyCore.h" />
     <ClInclude Include="legacyCore\LegacyDrawer.h" />
@@ -178,7 +177,6 @@
     <ClCompile Include="legacyCore\EFCknl.cpp" />
     <ClCompile Include="legacyCore\EFCmain.cpp" />
     <ClCompile Include="legacyCore\EFCpixel.cpp" />
-    <ClCompile Include="legacyCore\EFCthr.cpp" />
     <ClCompile Include="legacyCore\Inflater3.cpp" />
     <ClCompile Include="legacyCore\LegacyDrawer.cpp" />
     <ClCompile Include="legacyCore\LoopCore.cpp" />

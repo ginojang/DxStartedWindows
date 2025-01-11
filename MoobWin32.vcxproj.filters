@@ -58,9 +58,6 @@
     <ClInclude Include="legacyCore\EFCkey.h">
       <Filter>legacyCore</Filter>
     </ClInclude>
-    <ClInclude Include="legacyCore\EFCthr.h">
-      <Filter>legacyCore</Filter>
-    </ClInclude>
     <ClInclude Include="legacyCore\ResourceManager.h">
       <Filter>legacyCore</Filter>
     </ClInclude>
@@ -119,9 +116,6 @@
       <Filter>legacyCore</Filter>
     </ClCompile>
     <ClCompile Include="legacyCore\EFCkey.cpp">
-      <Filter>legacyCore</Filter>
-    </ClCompile>
-    <ClCompile Include="legacyCore\EFCthr.cpp">
       <Filter>legacyCore</Filter>
     </ClCompile>
     <ClCompile Include="legacyCore\ResourceManager.cpp">
