@@ -1,7 +1,6 @@
 #ifndef __EFC_PIXEL_HEADER__
 #define __EFC_PIXEL_HEADER__
 
-#include "EFCknl.h"
 
 	#define CHANGE_COLORS 4
 
@@ -34,6 +33,20 @@
 
 		EN_MODE_LAST
 	};
+
+
+	typedef M_Int32(*MC_GrpPixelOpProc)(M_Int32 srcpxl, M_Int32 orgpxl, M_Int32 param1);
+
+
+	typedef struct _MC_GrpContext
+	{
+		M_Int32 m_fgpxl;
+		M_Int32 m_transpxl;
+		MC_GrpPixelOpProc m_pfnPixelOp;
+		M_Int32 m_param1;
+
+	} MC_GrpContext;
+
 
 	typedef struct tagPIXELPROC {
 		uint16 (*proc)( sint32 nBACK, sint32 nSRC );
@@ -79,6 +92,10 @@
 
 	extern PIXELDATA PixelData;
 	extern PIXELPROC PixelProc[EN_MODE_LAST];
+
+
+	
+
 
 	//extern uint16 EFC_pixel_CONVERT_Proc( sint32 srcpxl, sint32 orgpxl, sint32 param1 );
 

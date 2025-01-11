@@ -28,9 +28,6 @@
     <ClInclude Include="freeImage\FreeImage.h">
       <Filter>Win32</Filter>
     </ClInclude>
-    <ClInclude Include="legacyCore\EFCknl.h">
-      <Filter>legacyCore</Filter>
-    </ClInclude>
     <ClInclude Include="legacyCore\EFCmain.h">
       <Filter>legacyCore</Filter>
     </ClInclude>
@@ -87,9 +84,6 @@
   <ItemGroup>
     <ClCompile Include="MoobWin32.cpp">
       <Filter>Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="legacyCore\EFCknl.cpp">
-      <Filter>legacyCore</Filter>
     </ClCompile>
     <ClCompile Include="legacyCore\EFCmain.cpp">
       <Filter>legacyCore</Filter>

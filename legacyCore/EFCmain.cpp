@@ -1,4 +1,6 @@
 #include "LegacyCore.h"
+#include "LegacyDrawer.h"
+
 #include "EFCmain.h"
 
 #include "EFCkey.h"
@@ -16,30 +18,15 @@ void EFC_mainInitialize( void )
 
 	MainData.isDebugDraw = FALSE;
 
-
-	// 아래 순서 바꾸지 말자
-	EFC_knlInitialize();
-	EFC_fntInitialize();
-
 	//
 	EFC_pxlInitialize();
-
-	
-	
 	//
 #if _CHECK
 	EFC_lnkInitialize();
 #endif
 
 	EFC_grpInitialize();
-
 	EFC_keyInitialize();
-	/// 초기화 추가시
-
-	
-	/// 쓰레드 실행
-	//EFC_thrPLAY();
-
 }
 
 void EFC_mainFinalize( void )
@@ -59,41 +46,15 @@ void EFC_mainFinalize( void )
 	//
 	
 	EFC_pxlFinalize();
-	//
-	EFC_fntFinalize();
-	EFC_knlFinalize();
 	
 }
 
 void EFC_mainPAUSE( void )
 {
-	if( MainData.nEXIT > 0 ) {
-		if( MainData.nEXIT == 1 ) {
-			EFC_knlEXIT();
-		}
-		MainData.nEXIT++;
-		return;
-	}
-
-	EFC_miscBackLight( FALSE );
-
-	//EFC_thrSTOP();
-	//EFC_mdaPAUSE();
 }
 
 void EFC_mainRESUME( void )
 {
-	//EFC_grpSetCLIP( PixelData.rtMAIN.nX, PixelData.rtMAIN.nY, PixelData.rtMAIN.nW, PixelData.rtMAIN.nH );
-
-	EFC_miscBackLight( TRUE );
-
-/*
-	EFC_grpSetRGB( RGB(0, 0, 0) );
-	EFC_grpFillSCREEN();*/
-
-
-	//EFC_mdaRESUME();
-	//EFC_thrPLAY();
 }
 
 
@@ -268,20 +229,6 @@ void EFC_mainFLUSH( void )
 
 void EFC_mainDRAW( void )
 {
-	// 한번 종료 코드 들어갔을 경우
-	if( MainData.bFINAL == TRUE ) {
-		return;
-	}
-
-	if( MainData.nEXIT > 0 ) {
-		if( MainData.nEXIT == 1 ) {
-			EFC_knlEXIT();
-		}
-		MainData.nEXIT++;
-		return;
-	}
-
-
 #if _CHECK
 	// TOUCH
 	while( MainData.xTOUCH.nCOUNT > 0 ) {

@@ -146,33 +146,24 @@ typedef struct _EXTimer
 } EXTimer;
 
 
+typedef struct tagEXRECT {
+	sint16		nX, nY;
+	sint16		nW, nH;
+} EXRECT, * LPEXRECT;
+
+typedef struct tagEXPOINT {
+	sint16		nX, nY;
+} EXPOINT, * LPEXPOINT;
+
+typedef struct tagEXREGION {
+	sint16		nX, nY;
+	sint16		nW, nH;
+	sint16		nSx, nSy;
+} EXREGION, * LPEXREGION;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Graphicis
-typedef M_Int32(*MC_GrpPixelOpProc)(M_Int32 srcpxl, M_Int32 orgpxl, M_Int32 param1);
-
-typedef struct _MC_GrpContext
-{
-	M_Int32 m_fgpxl;
-	M_Int32 m_transpxl;
-	MC_GrpPixelOpProc m_pfnPixelOp;
-	M_Int32 m_param1;
-
-} MC_GrpContext;
-
-
-typedef struct _MC_GrpFrameBuffer
-{
-	M_Int32 w;
-	M_Int32 h;
-	M_Int32 bpl;
-	M_Int32 bpp;
-	M_Int32 frameBufID;
-
-	LPEXBUFF buffer;
-
-} MC_GrpFrameBuffer;
 
 /*
 typedef struct _MC_GrpImage
@@ -182,12 +173,6 @@ typedef struct _MC_GrpImage
 
 } MC_GrpImage;
 */
-
-extern M_Int32 MC_grpCreateOffScreenFrameBuffer(M_Int32 w, M_Int32 h);
-extern void MC_grpDestroyOffScreenFrameBuffer(M_Int32 fb);
-extern M_Int32 MC_grpGetScreenFrameBuffer(M_Int32 s);
-extern void MC_grpInitContext(MC_GrpContext* pgc);
-extern void MC_grpFlushLcd(M_Int32 i, M_Int32 frm, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h);
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

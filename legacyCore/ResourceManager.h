@@ -12,12 +12,18 @@ public:
 	~ResourceManager();
 
 
+// asset file
 public:
 	EXBUFF* LoadFromAssets(const char* pszName);
 
 private:
+	LPEXBUFF EFC_fsLoadINFLATE(LPEXBUFF pAlloc);
+
+private:
 	int numFolders;
 	char AssetFolders[MAX_ASSET_FOLDERS][128];
+
+
 
 // Buffer
 public:
@@ -25,7 +31,7 @@ public:
 	ubyte* GetBufferBits(EXBUFF* buffer);
 	EXBUFF* AllocWithBuffer(EXBUFF* srcBuffer);
 	void ReleaseBuffer(EXBUFF* buffer);
-	void ReleaseAllBuffers();
+	void ReleaseAll();
 
 private:
 	EXBUFF* FindBuffer();

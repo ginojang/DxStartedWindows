@@ -52,16 +52,13 @@ void EFC_imgLoadARRAY( LPEXIMAGE pIMGs, schar *pStr, sint32 *pIDXs, sint32 nCoun
 			}
 		}
 
-		if( bBREAK == TRUE ) {
+		if( bBREAK == TRUE ) 
+		{
 			break;
 		}
-#if defined(REF2BYTE_MODE)
-		pIMGs[nIMG].nMoveX = (sint16)xTBmp.refX;
-		pIMGs[nIMG].nMoveY = (sint16)xTBmp.refY;
-#else
+
 		pIMGs[nIMG].nMoveX = xTBmp.refX;
 		pIMGs[nIMG].nMoveY = xTBmp.refY;
-#endif
 		pIMGs[nIMG].nPalette = 0;
 
 		nIDX++;

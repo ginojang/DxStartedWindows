@@ -38,10 +38,9 @@ ResourceManager::~ResourceManager()
 //////////////////////////////////////////////////////////////////////////
 ///  파일 부분
 ///
-#ifdef NATIVE_STAND_ALONE
-
-LPEXBUFF EFC_fsLoadINFLATE(LPEXBUFF pAlloc)
+LPEXBUFF ResourceManager::EFC_fsLoadINFLATE(LPEXBUFF pAlloc)
 {
+#ifdef NATIVE_STAND_ALONE
 	LPEXBUFF pUnZip;
 	EXFILE xFile;
 	sint32 nZip, nSize;
@@ -51,9 +50,7 @@ LPEXBUFF EFC_fsLoadINFLATE(LPEXBUFF pAlloc)
 
 	EFC_fsSetPOS(&xFile, 8);
 	nZip = EFC_fsReadUint16(&xFile);
-
-	//LOGI("NZIP: %d", nZip);
-
+	
 	if (nZip == 0x00009C78) {
 		EFC_fsSetPOS(&xFile, 4); // 압축된 파일 사이즈
 		nSize = EFC_fsReadSint32(&xFile); // 풀었을 때 파일 사이즈
@@ -66,8 +63,14 @@ LPEXBUFF EFC_fsLoadINFLATE(LPEXBUFF pAlloc)
 	}
 
 	return pAlloc;
+#else
+
+	return NULL;
+
+#endif
 }
 
+#ifdef NATIVE_STAND_ALONE
 void EFC_fsSECURITY(ubyte* pByte, sint32 nSize)
 {
 	int CRC_XOR = 0x97001326;
@@ -109,10 +112,27 @@ EXBUFF* ResourceManager::LoadFromAssets(const char* pszName)
 		char fileName[512];
 		sprintf(fileName, "%s%s", dirName, pszName);
 
-		int k = 1;
+		//char dir[512];
+		//GetCurrentDirectoryA(512, dir);
+
+		FILE* fp = fopen(fileName, "rb");
+		if (fp != NULL)
+		{
+			fseek(fp, 0, SEEK_END);
+			int nSize = ftell(fp);
+			fseek(fp, 0, SEEK_SET);
+
+			if (nSize > 0)
+			{
+				LPEXBUFF pBuf = EFC_memALLOC(nSize);
+				fread(pBuf->pByte, 1, nSize, fp);
+				fclose(fp);
+				return EFC_fsLoadINFLATE(pBuf);
+			}
+			else
+				fclose(fp);
+		}
 	}
-
-
 	return NULL;
 #else
 
@@ -213,7 +233,7 @@ void ResourceManager::ReleaseBuffer(EXBUFF* buffer)
 	delete[] buffer->pByte;
 }
 
-void ResourceManager::ReleaseAllBuffers()
+void ResourceManager::ReleaseAll()
 {
 	for (int i = 0; i < EXBUFFERS_NUM; i++)
 		if (exBuffers[i].nBuffID != 0)
@@ -226,7 +246,7 @@ void ResourceManager::ReleaseAllBuffers()
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// 기존 게임 소스 동작을 하기 위한 - 직접 호출 - 함수 -    >>> 작업 끝나고 LegacyCore.cpp 로 이동 예정
+/// 기존 게임 소스 동작을 하기 위한 - 직접 호출 - 함수 -    
 M_Int64 MC_knlCurrentTime()
 {
 	return 0;
@@ -238,7 +258,7 @@ LPEXBUFF EFC_fsLoadBUFF(schar* pszFile)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// 기존 게임 소스 동작을 하기 위한 - 직접 호출 - 함수 -  >>> 작업 끝나고 LegacyCore.cpp 로 이동 예정
+/// 기존 게임 소스 동작을 하기 위한 - 직접 호출 - 함수 -  
 ubyte* EFC_memGET(LPEXBUFF pBuff)
 {
 	return g_resourceManager.GetBufferBits(pBuff);

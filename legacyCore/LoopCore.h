@@ -16,3 +16,7 @@ public:
 
 
 extern LoopCore loopCore;
+
+
+
+extern sint32 EFC_knlGetRAND(void);

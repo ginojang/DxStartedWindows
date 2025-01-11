@@ -1,7 +1,7 @@
 #ifndef __EFC_MAIN_HEADER__
 #define __EFC_MAIN_HEADER__
 
-#include "EFCknl.h"
+
 
 	#define TOUCH_COUNT 10
 

@@ -5,7 +5,7 @@
 #include "EFCgrp.h"
 #include "EFCfnt.h"
 #include "EFCpixel.h"
-#include "EFCknl.h"
+
 
 #include "ResourceManager.h"
 

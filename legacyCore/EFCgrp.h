@@ -1,7 +1,7 @@
 #ifndef __EFC_GRAPHICS_HEADER__
 #define __EFC_GRAPHICS_HEADER__
 
-#include "EFCknl.h"
+
 
 	enum {
 		EN_TOP = 0x00000000,

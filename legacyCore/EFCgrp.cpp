@@ -3,7 +3,6 @@
 
 #include "EFCgrp.h"
 #include "EFCpixel.h"
-#include "EFCknl.h"
 #include "EFCimg.h"
 
 

@@ -82,9 +82,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\_output</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\_output</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -155,7 +157,6 @@
     <ClInclude Include="legacyCore\EFCgrp.h" />
     <ClInclude Include="legacyCore\EFCimg.h" />
     <ClInclude Include="legacyCore\EFCkey.h" />
-    <ClInclude Include="legacyCore\EFCknl.h" />
     <ClInclude Include="legacyCore\EFCmain.h" />
     <ClInclude Include="legacyCore\EFCpixel.h" />
     <ClInclude Include="legacyCore\Inflater3.h" />
@@ -174,7 +175,6 @@
     <ClCompile Include="legacyCore\EFCgrp.cpp" />
     <ClCompile Include="legacyCore\EFCimg.cpp" />
     <ClCompile Include="legacyCore\EFCkey.cpp" />
-    <ClCompile Include="legacyCore\EFCknl.cpp" />
     <ClCompile Include="legacyCore\EFCmain.cpp" />
     <ClCompile Include="legacyCore\EFCpixel.cpp" />
     <ClCompile Include="legacyCore\Inflater3.cpp" />
