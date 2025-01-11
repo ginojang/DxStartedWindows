@@ -252,6 +252,22 @@ typedef struct tagPIXELDATA
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // IMAGE
+enum {
+	EN_TOP = 0x00000000,
+	EN_VCENTER = 0x00000010,
+	EN_BOTTOM = 0x00000020,
+	EN_UP = 0x00000030,
+	EN_DOWN = 0x00000040
+};
+
+enum {
+	EN_LEFT = 0x00000000,
+	EN_HCENTER = 0x00000001,
+	EN_RIGHT = 0x00000002,
+	EN_MIX = 0x00000003
+};
+
+
 typedef struct tagEXIMAGE 
 {
 	LPEXBUFF			pBuff;
@@ -270,6 +286,11 @@ typedef struct tagEXIMAGE
 
 } EXIMAGE, * LPEXIMAGE;
 
+typedef struct tagEXMOVE
+{
+	sint16		moveX, moveY;
+
+} EXMOVE, * LPEXMOVE;
 
 
 #define SPRINTF	sprintf 

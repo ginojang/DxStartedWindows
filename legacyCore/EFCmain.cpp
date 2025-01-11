@@ -2,9 +2,7 @@
 #include "LegacyDrawer.h"
 
 #include "EFCmain.h"
-
 #include "EFCkey.h"
-#include "EFCgrp.h"
 #include "EFCfnt.h"
 
 
@@ -180,7 +178,7 @@ void EFC_mainDRAW( void )
 #endif
 
 
-	EFC_grpFLUSH();
+	g_legacyDrawer.Flush();
 	MainData.stateCount++;
 }
 

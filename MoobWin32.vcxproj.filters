@@ -40,9 +40,6 @@
     <ClInclude Include="legacyCore\EFCfnt.h">
       <Filter>legacyCore</Filter>
     </ClInclude>
-    <ClInclude Include="legacyCore\EFCgrp.h">
-      <Filter>legacyCore</Filter>
-    </ClInclude>
     <ClInclude Include="legacyCore\EFCimg.h">
       <Filter>legacyCore</Filter>
     </ClInclude>
@@ -95,9 +92,6 @@
       <Filter>legacyCore</Filter>
     </ClCompile>
     <ClCompile Include="legacyCore\EFCfnt.cpp">
-      <Filter>legacyCore</Filter>
-    </ClCompile>
-    <ClCompile Include="legacyCore\EFCgrp.cpp">
       <Filter>legacyCore</Filter>
     </ClCompile>
     <ClCompile Include="legacyCore\EFCimg.cpp">

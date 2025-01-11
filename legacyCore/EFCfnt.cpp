@@ -4,7 +4,6 @@
 #include "LegacyFilterProcs.h"
 #include "ResourceManager.h"
 
-#include "EFCgrp.h"
 #include "EFCfnt.h"
 
 

@@ -154,7 +154,6 @@
     <ClInclude Include="legacyCore\ABMReader.h" />
     <ClInclude Include="legacyCore\BinaryParser.h" />
     <ClInclude Include="legacyCore\EFCfnt.h" />
-    <ClInclude Include="legacyCore\EFCgrp.h" />
     <ClInclude Include="legacyCore\EFCimg.h" />
     <ClInclude Include="legacyCore\EFCkey.h" />
     <ClInclude Include="legacyCore\EFCmain.h" />
@@ -172,7 +171,6 @@
     <ClCompile Include="legacyCore\ABMReader.cpp" />
     <ClCompile Include="legacyCore\BinaryParser.cpp" />
     <ClCompile Include="legacyCore\EFCfnt.cpp" />
-    <ClCompile Include="legacyCore\EFCgrp.cpp" />
     <ClCompile Include="legacyCore\EFCimg.cpp" />
     <ClCompile Include="legacyCore\EFCkey.cpp" />
     <ClCompile Include="legacyCore\EFCmain.cpp" />

@@ -1,8 +1,6 @@
 #ifndef __EFC_IMAGE_HEADER__
 #define __EFC_IMAGE_HEADER__
 
-#include "EFCgrp.h"
-
 
 	enum {
 		EN_MIRROR_NONE = 0,
