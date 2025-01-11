@@ -1,5 +1,5 @@
 #include "LegacyCore.h"
-#include "LegacyCore.h"
+#include "LegacyDrawer.h"
 
 #include "EFCpixel.h"
 #include "EFCgrp.h"
@@ -191,9 +191,9 @@ void EFC_pxlInitialize( void )
 
 
 	PixelData.hReal = MC_grpGetScreenFrameBuffer( 0 );	
-	PixelData.rtREAL.nW = (sint16)EFC_GRP_GET_FRAME_BUFFER_WIDTH( PixelData.hReal );
-	PixelData.rtREAL.nH = (sint16)(EFC_GRP_GET_FRAME_BUFFER_HEIGHT( PixelData.hReal ) - PixelData.nANNUN);
-	PixelData.nBPP = (uint8)EFC_GRP_GET_FRAME_BUFFER_BPP( PixelData.hReal );
+	PixelData.rtREAL.nW = (sint16)g_legacyDrawer.GetFrameWidth( PixelData.hReal );
+	PixelData.rtREAL.nH = (sint16)(g_legacyDrawer.GetFrameHeight( PixelData.hReal ) - PixelData.nANNUN);
+	PixelData.nBPP = (uint8)g_legacyDrawer.GetFrameBpp( PixelData.hReal );
 
 	PixelData.isDoubleScreen = FALSE;
 
@@ -275,16 +275,16 @@ void EFC_pxlRectPROC( uint16 *pDATA, sint32 nBPW, sint32 nX, sint32 nY, sint32 n
 	}
 }
 
-void EFC_pxlCopyArea( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 nSX, sint32 nSY )
+void EFC_pxlCopyArea(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 nSX, sint32 nSY )
 {
 	uint16 *pDATA;
 	sint32 nSX1 = 0, nEX1 = 0, nSY1 = 0, nEY1 = 0, nSX2 = 0, nSY2 = 0;
 	sint32 nWIDTH, nBPL1, nBPW1;
 
-	nWIDTH = EFC_GRP_GET_FRAME_BUFFER_WIDTH( hBack );
-	nBPL1 = EFC_GRP_GET_FRAME_BUFFER_BPL( nWIDTH, PixelData.nBPP );
+	nWIDTH = g_legacyDrawer.GetFrameWidth( hBack );
+	nBPL1 = g_legacyDrawer.GetBplWithWidth( nWIDTH, PixelData.nBPP );
 	nBPW1 = nBPL1 / (PixelData.nBPP >> 3);
-	pDATA = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( hBack );
+	pDATA = (uint16 *)g_legacyDrawer.GetFrameBuffer( hBack );
 
 	if( (nX == nSX) && (nY == nSY) ) {
 		return;
@@ -322,17 +322,17 @@ void EFC_pxlCopyArea( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, 
 
 }
 
-void EFC_pxlSetFRAME( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBuffer hSRC, sint32 nSx, sint32 nSy, ubool bTRANS )
+void EFC_pxlSetFRAME(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hSRC, sint32 nSx, sint32 nSy, ubool bTRANS )
 {
 	sint32 nWIDTH1, nBPL1, nBPW1, nBPL2, nBPW2, nWIDTH2;
 	sint32 nSx1, nEx1, nSy1, nEy1, nSx2, nSy2 = 0, nMX2 = 1;
 
-	nWIDTH1 = EFC_GRP_GET_FRAME_BUFFER_WIDTH( hBack );
-	nBPL1 = EFC_GRP_GET_FRAME_BUFFER_BPL( nWIDTH1, PixelData.nBPP );
+	nWIDTH1 = g_legacyDrawer.GetFrameWidth( hBack );
+	nBPL1 = g_legacyDrawer.GetBplWithWidth( nWIDTH1, PixelData.nBPP );
 	nBPW1 = nBPL1 / (PixelData.nBPP >> 3);
 
-	nWIDTH2 = EFC_GRP_GET_FRAME_BUFFER_WIDTH( hSRC );
-	nBPL2 = EFC_GRP_GET_FRAME_BUFFER_BPL( nWIDTH2, PixelData.nBPP );
+	nWIDTH2 = g_legacyDrawer.GetFrameWidth( hSRC );
+	nBPL2 = g_legacyDrawer.GetBplWithWidth( nWIDTH2, PixelData.nBPP );
 	nBPW2 = nBPL2 / (PixelData.nBPP >> 3);
 
 	nSy2 = (nSx + nBPW2 * nSy);
@@ -340,8 +340,8 @@ void EFC_pxlSetFRAME( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, 
 	{
 		uint16 *pDATA1, *pDATA2;
 
-		pDATA1 = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( hBack );
-		pDATA2 = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( hSRC );
+		pDATA1 = (uint16 *)g_legacyDrawer.GetFrameBuffer( hBack );
+		pDATA2 = (uint16 *)g_legacyDrawer.GetFrameBuffer( hSRC );
 
 		if( PixelData.nMODE > EN_MODE_NORMAL ) {
 			if( bTRANS == TRUE ) {
@@ -379,7 +379,7 @@ void EFC_pxlSetFRAME( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, 
 	}
 }
 
-void EFC_pxlCopyFrameBuffer( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBuffer hSRC, sint32 nSx, sint32 nSy, ubool bTRANS )
+void EFC_pxlCopyFrameBuffer(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hSRC, sint32 nSx, sint32 nSy, ubool bTRANS )
 {
 	if( hBack == hSRC ) {
 		EFC_pxlCopyArea( hBack, nX, nY, nW, nH, nSx, nSy );
@@ -388,22 +388,22 @@ void EFC_pxlCopyFrameBuffer( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint
 	}
 }
 
-void EFC_pxlCopyFrameScale( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBuffer hSRC, sint32 nSX, sint32 nSY, sint32 nEx, sint32 nEy, ubool bTRANS )
+void EFC_pxlCopyFrameScale(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hSRC, sint32 nSX, sint32 nSY, sint32 nEx, sint32 nEy, ubool bTRANS )
 {
 	sint32 nWIDTH1, nBPL1, nBPW1, nBPL2, nBPW2, nWIDTH2, nHEIGHT2;
 	sint32 i, j, nDX1, nDY1, nSY1, nSX1, nSX2, nGW, nGH, nPOS;
 
 	uint16 *pDATA1, *pDATA2;
 
-	nWIDTH1 = EFC_GRP_GET_FRAME_BUFFER_WIDTH( hBack );
-	nBPL1 = EFC_GRP_GET_FRAME_BUFFER_BPL( nWIDTH1, PixelData.nBPP );
+	nWIDTH1 = g_legacyDrawer.GetFrameWidth( hBack );
+	nBPL1 = g_legacyDrawer.GetBplWithWidth( nWIDTH1, PixelData.nBPP );
 	nBPW1 = nBPL1 / (PixelData.nBPP >> 3);
 
-	nWIDTH2 = EFC_GRP_GET_FRAME_BUFFER_WIDTH( hSRC );
-	nBPL2 = EFC_GRP_GET_FRAME_BUFFER_BPL( nWIDTH2, PixelData.nBPP );
+	nWIDTH2 = g_legacyDrawer.GetFrameWidth( hSRC );
+	nBPL2 = g_legacyDrawer.GetBplWithWidth( nWIDTH2, PixelData.nBPP );
 	nBPW2 = nBPL2 / (PixelData.nBPP >> 3);
 
-	nHEIGHT2 = EFC_GRP_GET_FRAME_BUFFER_HEIGHT( hSRC );
+	nHEIGHT2 = g_legacyDrawer.GetFrameHeight( hSRC );
 
 	nSX = MIN_CALC( MAX_CALC( 0, nSX ), (nWIDTH2 - 1) );
 	nSY = MIN_CALC( MAX_CALC( 0, nSY ), (nHEIGHT2 - 1) );
@@ -413,8 +413,8 @@ void EFC_pxlCopyFrameScale( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint3
 	nGW = ((nEx - nSX + 1) << 12) / nW;
 	nGH = ((nEy - nSY + 1) << 12) / nH;
 
-	pDATA1 = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( hBack );
-	pDATA2 = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( hSRC );
+	pDATA1 = (uint16 *)g_legacyDrawer.GetFrameBuffer( hBack );
+	pDATA2 = (uint16 *)g_legacyDrawer.GetFrameBuffer( hSRC );
 
 	if( PixelData.nMODE != NULL ) {
 		if(bTRANS) 
@@ -455,48 +455,48 @@ void EFC_pxlCopyFrameScale( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint3
 	}
 }
 
-void EFC_pxlSetPixel( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY )
+void EFC_pxlSetPixel(sint32 hBack, sint32 nX, sint32 nY )
 {
 	sint32 nWIDTH, nBPL, nBPW;
 
-	nWIDTH = EFC_GRP_GET_FRAME_BUFFER_WIDTH( hBack );
-	nBPL = EFC_GRP_GET_FRAME_BUFFER_BPL( nWIDTH, PixelData.nBPP );
+	nWIDTH = g_legacyDrawer.GetFrameWidth( hBack );
+	nBPL = g_legacyDrawer.GetBplWithWidth( nWIDTH, PixelData.nBPP );
 	nBPW = nBPL / (PixelData.nBPP >> 3);
 
 	{
 		uint16 *pDATA, nCOLOR;
 
 		nCOLOR = (uint16)PixelData.nCOLOR;
-		pDATA = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( hBack );
+		pDATA = (uint16 *)g_legacyDrawer.GetFrameBuffer( hBack );
 
 		EFC_pxlRectPROC( pDATA, nBPW, nX, nY, 1, 1, nCOLOR );
 	} 
 }
 
-void EFC_pxlPutPixel( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY )
+void EFC_pxlPutPixel(sint32 hBack, sint32 nX, sint32 nY )
 {
 	EFC_pxlSetPixel( hBack, nX, nY );
 }
 
-void EFC_pxlSetRect( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH )
+void EFC_pxlSetRect(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH )
 {
 	sint32 nWIDTH, nBPL, nBPW;
 
-	nWIDTH = EFC_GRP_GET_FRAME_BUFFER_WIDTH( hBack );
-	nBPL = EFC_GRP_GET_FRAME_BUFFER_BPL( nWIDTH, PixelData.nBPP );
+	nWIDTH = g_legacyDrawer.GetFrameWidth( hBack );
+	nBPL = g_legacyDrawer.GetBplWithWidth( nWIDTH, PixelData.nBPP );
 	nBPW = nBPL / (PixelData.nBPP >> 3);
 
 	{
 		uint16 *pDATA, nCOLOR;
 
 		nCOLOR = (uint16)PixelData.nCOLOR;
-		pDATA = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( hBack );
+		pDATA = (uint16 *)g_legacyDrawer.GetFrameBuffer( hBack );
 
 		EFC_pxlRectPROC( pDATA, nBPW, nX, nY, nW, nH, nCOLOR );
 	}
 }
 
-void EFC_pxlFillRect( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH )
+void EFC_pxlFillRect(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH )
 {
 	EFC_pxlSetRect( hBack, nX, nY, nW, nH );
 }
@@ -533,22 +533,22 @@ void EFC_pxlDrawShadow( sint32 nX, sint32 nY, LPEXIMAGE pIMG, sint32 dir, sint32
 	}
 }
 */
-void EFC_pxlDrawArc( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBuffer hSRC )
+void EFC_pxlDrawArc(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hSRC )
 {
 	sint32 nWIDTH, nBPL, nBPW1, nBPW2;
 	sint32 nSX1, nEX1, nSY1, nEY1, nSX2, nSY2 = 0;
 	uint16 *pDATA, *pDATA2;
 
-	nWIDTH = EFC_GRP_GET_FRAME_BUFFER_WIDTH( hBack );
-	nBPL = EFC_GRP_GET_FRAME_BUFFER_BPL( nWIDTH, PixelData.nBPP );
+	nWIDTH = g_legacyDrawer.GetFrameWidth( hBack );
+	nBPL = g_legacyDrawer.GetBplWithWidth( nWIDTH, PixelData.nBPP );
 	nBPW1 = nBPL / (PixelData.nBPP >> 3);
 
-	nWIDTH = EFC_GRP_GET_FRAME_BUFFER_WIDTH( hSRC );
-	nBPL = EFC_GRP_GET_FRAME_BUFFER_BPL( nWIDTH, PixelData.nBPP );
+	nWIDTH = g_legacyDrawer.GetFrameWidth( hSRC );
+	nBPL = g_legacyDrawer.GetBplWithWidth( nWIDTH, PixelData.nBPP );
 	nBPW2 = nBPL / (PixelData.nBPP >> 3);
 
-	pDATA = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( hBack );
-	pDATA2 = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( hSRC );
+	pDATA = (uint16 *)g_legacyDrawer.GetFrameBuffer( hBack );
+	pDATA2 = (uint16 *)g_legacyDrawer.GetFrameBuffer( hSRC );
 
 	for( nSY1=(nX + nBPW1 * nY), nEY1=(nSY1 + nBPW1 * nH); nSY1<nEY1; nSY1+=nBPW1, nSY2+=nBPW2) {
 		for( nSX2=nSY2, nSX1=nSY1, nEX1=(nSY1 + nW); nSX1<nEX1; nSX1++, nSX2++) {
@@ -559,13 +559,13 @@ void EFC_pxlDrawArc( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, s
 		}
 	}
 }
-void EFC_pxlDrawBuff( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, LPEXIMAGE pIMG, sint32 nSX, sint32 nSY, sint32 nMIR, sint32 nPalette)
+void EFC_pxlDrawBuff(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, LPEXIMAGE pIMG, sint32 nSX, sint32 nSY, sint32 nMIR, sint32 nPalette)
 {
 	sint32 nWIDTH, nBPL, nBPW1, nBPW2;
 	sint32 nSX1, nEX1, nSY1, nEY1, nSX2, nSY2 = 0, nMX1 = 2, nMX2 = 1;
 
-	nWIDTH = EFC_GRP_GET_FRAME_BUFFER_WIDTH( hBack );
-	nBPL = EFC_GRP_GET_FRAME_BUFFER_BPL( nWIDTH, PixelData.nBPP );
+	nWIDTH = g_legacyDrawer.GetFrameWidth( hBack );
+	nBPL = g_legacyDrawer.GetBplWithWidth( nWIDTH, PixelData.nBPP );
 	nBPW1 = nBPL / (PixelData.nBPP >> 3);
 	nBPW2 =  WIDTH_BYTES(pIMG->nW);
 
@@ -576,7 +576,7 @@ void EFC_pxlDrawBuff( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, 
 		uint32 nCOLOR;
 		sint32 nPALPOS = MIN_CALC(nPalette, pIMG->nPalCnt-1) * ( pIMG->nPalLen << 2 );
 		sint32 nTRANS = CONVERT_INT(pDATA2, 0);
-		pDATA = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( hBack );
+		pDATA = (uint16 *)g_legacyDrawer.GetFrameBuffer( hBack );
 		
 		switch( nMIR ) {
 		case EN_MIRROR_NONE :

@@ -37,12 +37,12 @@
 	extern void EFC_grpFLUSH( void );
 
 	extern void EFC_grpGetANCHOR( LPEXRECT pRect, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 nANCHOR );
-	extern ubool EFC_grpIsMAIN( MC_GrpFrameBuffer *pFrame );
+	extern ubool EFC_grpIsMAIN(sint32 hFrame );
 
-	extern MC_GrpFrameBuffer *EFC_grpSetFRAME( MC_GrpFrameBuffer *pFrame );
+	extern sint32 EFC_grpSetFRAME(sint32 hFrame );
 	extern void EFC_grpCopyAREA( sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 nSx, sint32 nSy );
-	extern void EFC_grpCopyFRAME( sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBuffer *pFrame, sint32 nSx, sint32 nSy, ubool bTRANS );
-	extern void EFC_grpCopyBUFF( sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBuffer pFrame, sint32 nSx, sint32 nSy, sint32 nEx, sint32 nEy, ubool bTRANS );
+	extern void EFC_grpCopyFRAME( sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hFrame, sint32 nSx, sint32 nSy, ubool bTRANS );
+	extern void EFC_grpCopyBUFF( sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hFrame, sint32 nSx, sint32 nSy, sint32 nEx, sint32 nEy, ubool bTRANS );
 
 	extern void EFC_grpSetCLIP( sint32 nX, sint32 nY, sint32 nW, sint32 nH );
 	extern void EFC_grpSetLOCK( sint32 nLOCK );
@@ -86,8 +86,8 @@
 	extern void EFC_grpDrawSpritePal( sint32 nX, sint32 nY, LPEXIMAGE pIMG, sint32 nPal );
 	//extern void EFC_grpDrawSPRITEMirror( sint32 nX, sint32 nY, LPEXIMAGE pIMG, sint32 nANCHOR, sint32 nMIRROR );
 
-	extern void EFC_grpFillGausianBlur( MC_GrpFrameBuffer *pFrame,sint32 sX, sint32 sY, sint32 sW, sint32 sH, uint8 size );
-	extern void EFC_grpFillBLUR( MC_GrpFrameBuffer *pFrame );
+	extern void EFC_grpFillGausianBlur(sint32 hFrame, sint32 sX, sint32 sY, sint32 sW, sint32 sH, uint8 size );
+	extern void EFC_grpFillBLUR(sint32 hFrame);
 	extern void EFC_grpDrawMirror( sint32 nX, sint32 nY, LPEXIMAGE pIMG, sint32 nMIR, sint32 nPalette );
 /*
 	extern void EFC_grpSetSCALE( MC_GrpFrameBuffer hINPUT, sint32 nScaleX, sint32 nScaleY, MC_GrpFrameBuffer *pOUTPUT );

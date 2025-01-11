@@ -1,6 +1,7 @@
 #include "LegacyCore.h"
-#include "EFCgrp.h"
+#include "LegacyDrawer.h"
 
+#include "EFCgrp.h"
 #include "EFCpixel.h"
 #include "EFCknl.h"
 #include "EFCimg.h"
@@ -8,7 +9,7 @@
 
 void EFC_grpInitialize( void )
 {
-	EFC_grpSetFRAME( &PixelData.hScreen );
+	EFC_grpSetFRAME( PixelData.hScreen );
 
 	//EFC_grpSetRGB( RGB(255, 255, 255) );
 	//EFC_grpFillSCREEN();
@@ -76,7 +77,7 @@ void EFC_grpSetScreenOrientation(ScreenOrientation nMode)
 			PixelData.hScreen = MC_grpCreateOffScreenFrameBuffer( PixelData.rtMAIN.nW, PixelData.rtMAIN.nH );
 		}
 
-		PixelData.nBPP = (uint8)EFC_GRP_GET_FRAME_BUFFER_BPP( PixelData.hScreen );	
+		PixelData.nBPP = g_legacyDrawer.GetFrameBpp( PixelData.hScreen );	
 
 		PixelData.rtCLIP.nW = PixelData.rtMAIN.nW;
 		PixelData.rtCLIP.nH = PixelData.rtMAIN.nH;
@@ -112,7 +113,7 @@ void EFC_grpTransformMousePos(LPEXPOINT pPoint)
 		sint32 nX = pPoint->nX;
 		sint32 nY = pPoint->nY;
 		pPoint->nX = nY;
-		pPoint->nY = (EFC_GRP_GET_FRAME_BUFFER_WIDTH(PixelData.hLandScapeScreen)-1)-nX;
+		pPoint->nY = (g_legacyDrawer.GetFrameWidth(PixelData.hLandScapeScreen)-1)-nX;
 	}
 }
 
@@ -122,168 +123,12 @@ void EFC_grpFLUSH( void )
 	EXREGION rgn;
 
 	pRect = &PixelData.rtMAIN;
-	if( EFC_rgnSetREGION( &rgn, pRect->nX, pRect->nY, pRect->nW, pRect->nH, 0, 0 ) == FALSE ) {
+	if( EFC_rgnSetREGION( &rgn, pRect->nX, pRect->nY, pRect->nW, pRect->nH, 0, 0 ) == FALSE ) 
+	{
 		return;
 	}
 
-#if defined( SKT_WIPI ) 
-	#if defined(USE_TOUCH_PROC)
-		EFC_rgnRealREGION( &rgn, EN_MIRROR_NONE );
-
-		if (EFC_grpGetOrientationMode() == SCREEN_ORIENTATION_LANDSCAPE)
-		{//가로모드일 경우 뒤집어 준다.
-			sint32 i, j, k;
-			sint32 nNewHeight, nNewWidth;
-			sint32 nByteWidth, nNewByteWidth;
-			uint16 *pSrc, *pDst;
-
-			pSrc = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( PixelData.hScreen );
-			pDst = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( PixelData.hLandScapeScreen );	
-
-			nNewWidth = EFC_GRP_GET_FRAME_BUFFER_WIDTH(PixelData.hLandScapeScreen);
-			nNewHeight = EFC_GRP_GET_FRAME_BUFFER_HEIGHT(PixelData.hLandScapeScreen);
-
-			nByteWidth = WIDTH_BYTES( nNewHeight );
-			nNewByteWidth = WIDTH_BYTES( nNewWidth );
-
-			for(i = 0; i < nNewHeight; ++i)
-			{
-				for(j = 0, k = nNewWidth-1; j < nNewWidth; ++j, --k)
-				{
-					pDst[i*nNewByteWidth+j] = pSrc[k*nByteWidth+i];
-				}
-			}
-
-			MC_grpFlushLcd( 0, PixelData.hLandScapeScreen, rgn.nX, rgn.nY, rgn.nH, rgn.nW );
-		}
-		else 
-		{
-			MC_grpFlushLcd( 0, PixelData.hScreen, rgn.nX, rgn.nY, rgn.nW, rgn.nH );
-		}
-	#else 
-		MC_grpFlushLcd( 0, PixelData.hScreen, rgn.nX, rgn.nY, rgn.nW, rgn.nH );
-	#endif
-#else
-	MC_grpInitContext( &PixelData.hGC );
-
-	#if defined(KT_WIPI)
-		MC_grpPutPixel(PixelData.hReal, 0, 0, &PixelData.hGC);
-		MC_grpPutPixel( PixelData.hReal, MC_GRP_GET_FRAME_BUFFER_WIDTH(PixelData.hReal)-1, MC_GRP_GET_FRAME_BUFFER_HEIGHT(PixelData.hReal)-1, &PixelData.hGC);
-	#endif
-
-		EFC_rgnRealREGION( &rgn, EN_MIRROR_NONE );
-
-#if defined(USE_TOUCH_PROC)
-		if (EFC_grpGetOrientationMode() == SCREEN_ORIENTATION_LANDSCAPE)
-		{//가로모드일 경우 뒤집어 준다.
-			sint32 i, j, k;
-			sint32 nNewHeight, nNewWidth;
-			sint32 nByteWidth, nNewByteWidth;
-			uint16 *pSrc, *pDst;
-
-			pSrc = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( PixelData.hScreen );
-			pDst = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( PixelData.hLandScapeScreen );	
-
-			nNewWidth = EFC_GRP_GET_FRAME_BUFFER_WIDTH(PixelData.hLandScapeScreen);
-			nNewHeight = EFC_GRP_GET_FRAME_BUFFER_HEIGHT(PixelData.hLandScapeScreen);
-
-			nByteWidth = WIDTH_BYTES( nNewHeight );
-			nNewByteWidth = WIDTH_BYTES( nNewWidth );
-
-			for(i = 0; i < nNewHeight; ++i)
-			{
-				for(j = 0, k = nNewWidth-1; j < nNewWidth; ++j, --k)
-				{
-					pDst[i*nNewByteWidth+j] = pSrc[k*nByteWidth+i];
-				}
-			}
-
-			if(PixelData.isDoubleScreen)
-			{
-				sint32 i, j, k;
-				sint32 nNewHeight, nNewWidth, nHeight, nWidth;
-				sint32 nByteWidth, nNewByteWidth;
-				uint16 *pSrc, *pDst;
-
-				pSrc = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( PixelData.hLandScapeScreen );
-				pDst = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( PixelData.hReal );	
-
-				nNewWidth = EFC_GRP_GET_FRAME_BUFFER_WIDTH(PixelData.hReal);
-				nNewHeight = EFC_GRP_GET_FRAME_BUFFER_HEIGHT(PixelData.hReal);
-
-				nWidth = EFC_GRP_GET_FRAME_BUFFER_WIDTH(PixelData.hLandScapeScreen);
-				nHeight = EFC_GRP_GET_FRAME_BUFFER_HEIGHT(PixelData.hLandScapeScreen);
-
-				nByteWidth = WIDTH_BYTES( nWidth );
-				nNewByteWidth = WIDTH_BYTES( nNewWidth );
-
-				for(i = 0; i < nHeight; ++i)
-				{
-					for(j = 0; j < nWidth; ++j)
-					{
-						pDst[i*2*nNewByteWidth+j*2] = pSrc[i*nByteWidth+j];
-						pDst[i*2*nNewByteWidth+j*2+1] = pSrc[i*nByteWidth+j];
-						pDst[(i*2+1)*nNewByteWidth+j*2] = pSrc[i*nByteWidth+j];
-						pDst[(i*2+1)*nNewByteWidth+j*2+1] = pSrc[i*nByteWidth+j];
-					}
-				}
-
-				MC_grpFlushLcd( 0, PixelData.hReal, rgn.nX, rgn.nY, rgn.nH*2, rgn.nW*2);
-			}			
-			else 
-			{
-				MC_grpFlushLcd( 0, PixelData.hLandScapeScreen, rgn.nX, rgn.nY, rgn.nH, rgn.nW );
-			}
-		}
-		else 
-		{
-			if (PixelData.isDoubleScreen)
-			{
-				sint32 i, j, k;
-				sint32 nNewHeight, nNewWidth, nHeight, nWidth;
-				sint32 nByteWidth, nNewByteWidth;
-				uint16 *pSrc, *pDst;
-
-				pSrc = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( PixelData.hScreen );
-				pDst = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( PixelData.hReal );	
-
-				nNewWidth = EFC_GRP_GET_FRAME_BUFFER_WIDTH(PixelData.hReal);
-				nNewHeight = EFC_GRP_GET_FRAME_BUFFER_HEIGHT(PixelData.hReal);
-
-				nWidth = EFC_GRP_GET_FRAME_BUFFER_WIDTH(PixelData.hScreen);
-				nHeight = EFC_GRP_GET_FRAME_BUFFER_HEIGHT(PixelData.hScreen);
-
-				nByteWidth = WIDTH_BYTES( nWidth );
-				nNewByteWidth = WIDTH_BYTES( nNewWidth );
-
-				for(i = 0; i < nHeight; ++i)
-				{
-					for(j = 0; j < nWidth; ++j)
-					{
-						pDst[i*2*nNewByteWidth+j*2] = pSrc[i*nByteWidth+j];
-						pDst[i*2*nNewByteWidth+j*2+1] = pSrc[i*nByteWidth+j];
-						pDst[(i*2+1)*nNewByteWidth+j*2] = pSrc[i*nByteWidth+j];
-						pDst[(i*2+1)*nNewByteWidth+j*2+1] = pSrc[i*nByteWidth+j];
-					}
-				}
-
-				MC_grpFlushLcd( 0, PixelData.hReal, rgn.nX, rgn.nY, rgn.nW*2, rgn.nH*2);
-			}
-			else 
-			{
-				MC_grpFlushLcd( 0, PixelData.hScreen, rgn.nX, rgn.nY, rgn.nW, rgn.nH);
-			}
-		}
-	#else 
-		MC_grpFlushLcd( 0, PixelData.hScreen, rgn.nX, rgn.nY, rgn.nW, rgn.nH );
-	#endif	
-#endif
-
-#if defined( USE_TOUCH_PROC )
-	//PixelData.rtMAIN = rtMAIN;
-	//PixelData.rtCLIP = rtCLIP;
-	//LCD_H	= PixelData.rtMAIN.nH-80;
-#endif
+	MC_grpFlushLcd( 0, PixelData.hScreen, rgn.nX, rgn.nY, rgn.nW, rgn.nH );
 }
 
 void EFC_grpGetANCHOR( LPEXRECT pRect, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 nANCHOR )
@@ -314,26 +159,26 @@ void EFC_grpGetANCHOR( LPEXRECT pRect, sint32 nX, sint32 nY, sint32 nW, sint32 n
 	EFC_rgnSetRECT( pRect, nX, nY, nW, nH );
 }
 
-ubool EFC_grpIsMAIN( MC_GrpFrameBuffer *pFrame )
+ubool EFC_grpIsMAIN(sint32 hFrame)
 {
-	if( PixelData.hScreen == (*pFrame) ) {
+	if( PixelData.hScreen == hFrame) {
 		return TRUE;
 	}
 
 	return FALSE;
 }
 
-MC_GrpFrameBuffer *EFC_grpSetFRAME( MC_GrpFrameBuffer *pFrame )
+sint32 EFC_grpSetFRAME(sint32 hFrame )
 {
-	MC_GrpFrameBuffer *pPREV;
+	sint32 hPREV;
 
-	pPREV = PixelData.pFrame;
-	PixelData.pFrame = pFrame;
+	hPREV = PixelData.hFrame;
+	PixelData.hFrame = hFrame;
 
 	EFC_grpInitMODE();
 	EFC_grpReset();
 
-	return pPREV;
+	return hPREV;
 }
 
 void EFC_grpCopyAREA( sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 nSx, sint32 nSy )
@@ -352,14 +197,14 @@ void EFC_grpCopyAREA( sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 nSx, si
 		return;
 	}
 
-	EFC_pxlCopyArea( (*PixelData.pFrame), rgn.nX, rgn.nY, rgn.nW, rgn.nH, rgn.nSx, rgn.nSy );
+	EFC_pxlCopyArea( PixelData.hFrame, rgn.nX, rgn.nY, rgn.nW, rgn.nH, rgn.nSx, rgn.nSy );
 }
 
-void EFC_grpCopyFRAME( sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBuffer *pFrame, sint32 nSx, sint32 nSy, ubool bTRANS )
+void EFC_grpCopyFRAME( sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hFrame, sint32 nSx, sint32 nSy, ubool bTRANS )
 {
 	EXREGION rgn;
 
-	if( EFC_grpIsMAIN( pFrame ) == TRUE ) {
+	if( EFC_grpIsMAIN(hFrame) == TRUE ) {
 		nSy += PixelData.nANNUN;
 	}
 
@@ -368,15 +213,15 @@ void EFC_grpCopyFRAME( sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBu
 		return;
 	}
 
-	EFC_pxlCopyFrameBuffer( (*PixelData.pFrame), rgn.nX, rgn.nY, rgn.nW, rgn.nH, (*pFrame), rgn.nSx, rgn.nSy, bTRANS );
+	EFC_pxlCopyFrameBuffer( PixelData.hFrame, rgn.nX, rgn.nY, rgn.nW, rgn.nH, hFrame, rgn.nSx, rgn.nSy, bTRANS );
 }
 
-void EFC_grpCopyBUFF( sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBuffer pFrame, sint32 nSx, sint32 nSy, sint32 nEx, sint32 nEy, ubool bTRANS )
+void EFC_grpCopyBUFF( sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hFrame, sint32 nSx, sint32 nSy, sint32 nEx, sint32 nEy, ubool bTRANS )
 {
 	EXREGION rgn;
 	sint32 nX1, nY1, nX2, nY2;
 
-	if( EFC_grpIsMAIN( &pFrame ) == TRUE ) {
+	if( EFC_grpIsMAIN(hFrame) == TRUE ) {
 		nSy += PixelData.nANNUN;
 	}
 
@@ -391,7 +236,7 @@ void EFC_grpCopyBUFF( sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBuf
 	nX2 = nSx + ((nEx - nSx) * (rgn.nSx + rgn.nW)) / nW;
 	nY2 = nSy + ((nEy - nSy) * (rgn.nSy + rgn.nH)) / nH;
 
-	EFC_pxlCopyFrameScale( (*PixelData.pFrame), rgn.nX, rgn.nY, rgn.nW, rgn.nH, pFrame, nX1, nY1, nX2, nY2, bTRANS );
+	EFC_pxlCopyFrameScale( PixelData.hFrame, rgn.nX, rgn.nY, rgn.nW, rgn.nH, hFrame, nX1, nY1, nX2, nY2, bTRANS );
 }
 
 void EFC_grpSetCLIP( sint32 nX, sint32 nY, sint32 nW, sint32 nH )
@@ -542,7 +387,7 @@ void EFC_grpDrawPIXEL( sint32 nX, sint32 nY )
 		return;
 	}
 
-	EFC_pxlPutPixel( (*PixelData.pFrame), rgn.nX, rgn.nY );
+	EFC_pxlPutPixel( PixelData.hFrame, rgn.nX, rgn.nY );
 }
 
 void EFC_grpDrawLINE( sint32 nX1, sint32 nY1, sint32 nX2, sint32 nY2 )
@@ -605,7 +450,7 @@ void EFC_grpFillRECT( sint32 nX, sint32 nY, sint32 nW, sint32 nH )
 		return;
 	}
 
-	EFC_pxlFillRect( (*PixelData.pFrame), rgn.nX, rgn.nY, rgn.nW, rgn.nH);
+	EFC_pxlFillRect( PixelData.hFrame, rgn.nX, rgn.nY, rgn.nW, rgn.nH);
 }
 
 void EFC_grpDrawPOLYGON( sint32 nX, sint32 nY, LPEXPOINT pPTs, sint32 nCOUNT )
@@ -777,8 +622,8 @@ void EFC_grpFillSCREEN( void )
 	PixelData.ptTRANS.nX = 0;
 	PixelData.ptTRANS.nY = 0;
 
-	nW = EFC_GRP_GET_FRAME_BUFFER_WIDTH( (*PixelData.pFrame) );
-	nH = EFC_GRP_GET_FRAME_BUFFER_HEIGHT( (*PixelData.pFrame) );
+	nW = g_legacyDrawer.GetFrameWidth( PixelData.hFrame );
+	nH = g_legacyDrawer.GetFrameHeight( PixelData.hFrame );
 	EFC_grpFillRECT( 0, 0, nW, nH );
 
 	PixelData.ptTRANS = pt;
@@ -1239,7 +1084,7 @@ void EFC_grpDrawClipIMAGE( sint32 nX, sint32 nY, sint32 nW, sint32 nH, LPEXIMAGE
 		return;
 	}
 
-	EFC_pxlDrawBuff( (*PixelData.pFrame), rgn.nX, rgn.nY, rgn.nW, rgn.nH, pIMG, rgn.nSx, rgn.nSy, 0, nPal);
+	EFC_pxlDrawBuff( PixelData.hFrame, rgn.nX, rgn.nY, rgn.nW, rgn.nH, pIMG, rgn.nSx, rgn.nSy, 0, nPal);
 }
 
 void EFC_grpDrawIMAGE( sint32 nX, sint32 nY, LPEXIMAGE pIMG, sint32 nANCHOR )
@@ -1312,27 +1157,27 @@ void EFC_grpDrawMirror( sint32 nX, sint32 nY, LPEXIMAGE pIMG, sint32 nMIR, sint3
 		return;
 	}
 
-	EFC_pxlDrawBuff( (*PixelData.pFrame), rgn.nX, rgn.nY, rgn.nW, rgn.nH, pIMG, rgn.nSx, rgn.nSy, nMIR, nPalette);
+	EFC_pxlDrawBuff( PixelData.hFrame, rgn.nX, rgn.nY, rgn.nW, rgn.nH, pIMG, rgn.nSx, rgn.nSy, nMIR, nPalette);
 }
 ////////////////////////////////////////////////////////////
 
-void EFC_grpFillBLUR( MC_GrpFrameBuffer *pFrame )
+void EFC_grpFillBLUR(sint32 hFrame)
 {
 	sint32 i, j;
 	sint32 nW, nH, nBPL, nBPW;
 	sint32 nR, nG, nB;
 	sint32 nX, nY, nPOS;
 
-	nW = EFC_GRP_GET_FRAME_BUFFER_WIDTH( (*pFrame) );
-	nH = EFC_GRP_GET_FRAME_BUFFER_HEIGHT( (*pFrame) );
+	nW = g_legacyDrawer.GetFrameWidth(hFrame);
+	nH = g_legacyDrawer.GetFrameHeight(hFrame);
 	
-	nBPL = EFC_GRP_GET_FRAME_BUFFER_BPL( nW, PixelData.nBPP );
+	nBPL = g_legacyDrawer.GetBplWithWidth( nW, PixelData.nBPP );
 	nBPW = nBPL / (PixelData.nBPP >> 3);
 
 	{
 		uint16 *pDATA;
 	
-		pDATA = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( (*pFrame) );
+		pDATA = (uint16 *)g_legacyDrawer.GetFrameBuffer(hFrame);
 
 		for( i=(nH - 1); i>=0; i-- ) {
 			for( j=(nW - 1); j>=0; j-- ) {

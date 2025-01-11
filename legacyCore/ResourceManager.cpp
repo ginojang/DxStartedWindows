@@ -22,6 +22,10 @@ ResourceManager::~ResourceManager()
 
 }
 
+
+//////////////////////////////////////////////////////////////////////////
+///  파일 부분
+///
 // public
 EXBUFF* ResourceManager::LoadFromAssets(const char* pszName)
 {
@@ -86,48 +90,73 @@ void ResourceManager::ReleaseBuffer(EXBUFF* buffer)
 	delete[] buffer->pByte;
 }
 
-
-
-
-///////////////
-
-
-MC_GrpFrameBuffer MC_grpCreateOffScreenFrameBuffer(M_Int32 w, M_Int32 h)
+void ResourceManager::ReleaseAllBuffers()
 {
-	MC_GrpFrameBuffer ret = 0;
-
-	return ret;
-}
-void MC_grpDestroyOffScreenFrameBuffer(MC_GrpFrameBuffer fb)
-{
-
-}
-
-MC_GrpFrameBuffer MC_grpGetScreenFrameBuffer(M_Int32 s)
-{
-	return 0;
-}
-void MC_grpInitContext(MC_GrpContext* pgc)
-{
-
-}
-
-
-void MC_grpFlushLcd(M_Int32 i, MC_GrpFrameBuffer frm, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h)
-{
-
+	for (int i = 0; i < EXBUFFERS_NUM; i++)
+		if (exBuffers[i].nBuffID != 0)
+		{
+			ReleaseBuffer(&exBuffers[i]);
+		}
 }
 
 
 
 
-///////////////////
-//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// 기존 게임 소스 동작을 하기 위한 - 직접 호출 - 함수 -    >>> 작업 끝나고 LegacyCore.cpp 로 이동 예정
 M_Int64 MC_knlCurrentTime()
 {
 	return 0;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// 기존 게임 소스 동작을 하기 위한 - 직접 호출 - 함수 -  >>> 작업 끝나고 LegacyCore.cpp 로 이동 예정
+ubyte* EFC_memGET(LPEXBUFF pBuff)
+{
+	return g_resourceManager.GetBufferBits(pBuff);
+}
+ubool EFC_memSET(LPEXBUFF pBuff, sint32 nSize)
+{
+	pBuff = EFC_memALLOC(nSize);
+	return TRUE;
+}
+LPEXBUFF EFC_memALLOC(sint32 nSize)
+{
+	return g_resourceManager.AllocBuffer(nSize);
+}
+LPEXBUFF EFC_memCOPY(LPEXBUFF pBuff)
+{
+	return g_resourceManager.AllocWithBuffer(pBuff);
+}
+void EFC_memFREE(LPEXBUFF pBuff)
+{
+	g_resourceManager.ReleaseBuffer(pBuff);
+}
+void EFC_fxtCHANGE(LPEXBUFF pBuff, schar szOld, schar szNew)
+{
+	schar* pChar, * pPrev;
+	schar szBuff[2];
 
+	szBuff[0] = szOld;
+	szBuff[1] = 0;
 
+	pChar = (schar*)EFC_memGET(pBuff);
+	if (pChar == NULL)
+	{
+		return;
+	}
+
+	pPrev = pChar;
+	while (pChar != NULL) {
+		pChar = (schar*)STRSTR((schar*)pPrev, szBuff);
+		if (pChar == NULL) {
+			break;
+		}
+
+		pChar[0] = szNew;
+
+		pChar++;
+		pPrev = pChar;
+	}
+}
 

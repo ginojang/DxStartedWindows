@@ -1,7 +1,6 @@
 #include "LegacyCore.h"
-
+#include "ResourceManager.h"
 #include "LoopCore.h"
-
 #include "EFCmain.h"
 
 
@@ -35,5 +34,5 @@ void LoopCore::Update()
 
 void LoopCore::Close()
 {
-
+	g_resourceManager.ReleaseAllBuffers();
 }

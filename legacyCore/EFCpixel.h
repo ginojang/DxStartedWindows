@@ -40,10 +40,10 @@
 	} PIXELPROC, *LPPIXELPROC;
 
 	typedef struct tagPIXELDATA {
-		MC_GrpFrameBuffer	hReal;
-		MC_GrpFrameBuffer	hScreen;
-		MC_GrpFrameBuffer	hLandScapeScreen;
-		MC_GrpFrameBuffer	*pFrame;
+		sint32	hReal;
+		sint32	hScreen;
+		sint32	hLandScapeScreen;
+		sint32  hFrame;
 
 		MC_GrpContext		hGC;
 
@@ -85,16 +85,16 @@
 	extern void EFC_pxlInitialize( void );
 	extern void EFC_pxlFinalize( void );
 
-	extern void EFC_pxlCopyArea( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 nSx, sint32 nSy );
-	extern void EFC_pxlCopyFrameBuffer( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBuffer hSRC, sint32 nSx, sint32 nSy, ubool bTRANS );
-	extern void EFC_pxlCopyFrameScale( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBuffer hSRC, sint32 nSX, sint32 nSY, sint32 nEx, sint32 nEy, ubool bTRANS );
-	extern void EFC_pxlPutPixel( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY );
-	extern void EFC_pxlFillRect( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH );
-	//extern void EFC_pxlDrawImage( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpImage imgSRC, sint32 nSx, sint32 nSy, MC_GrpContext *pGC );
-	extern void EFC_pxlDrawBuff( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, LPEXIMAGE pIMG, sint32 nSX, sint32 nSY, sint32 nMIR, sint32 nPalette);
+	extern void EFC_pxlCopyArea( sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 nSx, sint32 nSy );
+	extern void EFC_pxlCopyFrameBuffer(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hSRC, sint32 nSx, sint32 nSy, ubool bTRANS );
+	extern void EFC_pxlCopyFrameScale(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hSRC, sint32 nSX, sint32 nSY, sint32 nEx, sint32 nEy, ubool bTRANS );
+	extern void EFC_pxlPutPixel(sint32 hBack, sint32 nX, sint32 nY );
+	extern void EFC_pxlFillRect(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH );
+	//extern void EFC_pxlDrawImage( sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpImage imgSRC, sint32 nSx, sint32 nSy, MC_GrpContext *pGC );
+	extern void EFC_pxlDrawBuff(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, LPEXIMAGE pIMG, sint32 nSX, sint32 nSY, sint32 nMIR, sint32 nPalette);
 
 	extern void EFC_pxlDrawShadow( sint32 nX, sint32 nY, LPEXIMAGE pIMG, sint32 dir, sint32 nMIR );
-	extern void EFC_pxlDrawArc( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, MC_GrpFrameBuffer hSRC );
+	extern void EFC_pxlDrawArc(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hSRC );
 
 	/////////////////////////////////////////////////////////
 	// 아래의 모든 계산에 들어가는 N SHIFT는 2^N - 1 값으로

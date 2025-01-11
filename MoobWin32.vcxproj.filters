@@ -70,6 +70,9 @@
     <ClInclude Include="legacyCore\LegacyCore.h">
       <Filter>legacyCore</Filter>
     </ClInclude>
+    <ClInclude Include="legacyCore\LegacyDrawer.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MoobWin32.rc">
@@ -92,9 +95,6 @@
       <Filter>legacyCore</Filter>
     </ClCompile>
     <ClCompile Include="legacyCore\EFCmain.cpp">
-      <Filter>legacyCore</Filter>
-    </ClCompile>
-    <ClCompile Include="legacyCore\EFCmem.cpp">
       <Filter>legacyCore</Filter>
     </ClCompile>
     <ClCompile Include="legacyCore\EFCpixel.cpp">
@@ -128,6 +128,9 @@
       <Filter>legacyCore</Filter>
     </ClCompile>
     <ClCompile Include="legacyCore\LoopCore.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\LegacyDrawer.cpp">
       <Filter>legacyCore</Filter>
     </ClCompile>
   </ItemGroup>

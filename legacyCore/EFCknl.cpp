@@ -126,7 +126,7 @@ void EFC_rgnSetPOINT( LPEXPOINT pPT, sint32 nX, sint32 nY )
 
 void EFC_rgnRealPOINT( LPEXPOINT pPT, sint32 nX, sint32 nY )
 {
-	if( EFC_grpIsMAIN( PixelData.pFrame ) == TRUE ) {
+	if( EFC_grpIsMAIN( PixelData.hFrame ) == TRUE ) {
 		EFC_rgnSetPOINT( pPT,
 			nX + PixelData.ptTRANS.nX,
 			nY + PixelData.ptTRANS.nY + PixelData.nANNUN );
@@ -279,7 +279,7 @@ ubool EFC_rgnInterREGION( LPEXREGION pRgn, LPEXRECT pRect, LPEXREGION pRegion )
 
 void EFC_rgnSetTRANS( LPEXPOINT pPT, sint32 nX, sint32 nY )
 {
-	if( EFC_grpIsMAIN( PixelData.pFrame ) == TRUE ) {
+	if( EFC_grpIsMAIN( PixelData.hFrame ) == TRUE ) {
 		EFC_rgnSetPOINT( pPT, nX + PixelData.ptTRANS.nX, nY + PixelData.ptTRANS.nY );
 	} else {
 		EFC_rgnSetPOINT( pPT, nX, nY );
@@ -288,7 +288,7 @@ void EFC_rgnSetTRANS( LPEXPOINT pPT, sint32 nX, sint32 nY )
 
 void EFC_rgnSetANNUN( LPEXPOINT pPT, sint32 nX, sint32 nY )
 {
-	if( EFC_grpIsMAIN( PixelData.pFrame ) == TRUE ) {
+	if( EFC_grpIsMAIN( PixelData.hFrame ) == TRUE ) {
 		EFC_rgnSetPOINT( pPT, nX, nY + PixelData.nANNUN );
 	} else {
 		EFC_rgnSetPOINT( pPT, nX, nY );

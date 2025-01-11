@@ -31,7 +31,7 @@
 	} EXPAGE, *LPEXPAGE;
 
 	typedef struct tagEXFONTDATA {
-		MC_GrpFrameBuffer		hBack;
+		sint32					hBack;
 		LPEXBUFF				pPAL;
 		LPEXBUFF				pDATA;	// 폰트 완성형 데이터 버퍼
 		uint8					nBOLD;

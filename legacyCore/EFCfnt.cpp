@@ -1,4 +1,5 @@
 #include "LegacyCore.h"
+#include "LegacyDrawer.h"
 
 #include "EFCgrp.h"
 #include "EFCfnt.h"
@@ -229,19 +230,19 @@ sint32 EFC_fntGetWIDTH( LPEXBUFF pBuff )
 }
 
 ////Ãß°¡/////////////////////////////////
-void EFC_fntInitFillRect( MC_GrpFrameBuffer hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH )
+void EFC_fntInitFillRect(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 nH )
 {
 	sint32 nWIDTH, nBPL, nBPW;
 	
-	nWIDTH = EFC_GRP_GET_FRAME_BUFFER_WIDTH( hBack );
-	nBPL = EFC_GRP_GET_FRAME_BUFFER_BPL( nWIDTH, PixelData.nBPP );
+	nWIDTH = g_legacyDrawer.GetFrameWidth( hBack );
+	nBPL = g_legacyDrawer.GetBplWithWidth( nWIDTH, PixelData.nBPP );
 	nBPW = nBPL / (PixelData.nBPP >> 3);
 
 	{
 		uint16 *pDATA, nCOLOR;
 
 		nCOLOR = (uint16)PixelData.nTRANS;
-		pDATA = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( hBack );
+		pDATA = (uint16 *)g_legacyDrawer.GetFrameBuffer( hBack );
 		{
 			sint32 nSX1, nEX1, nSY1, nEY1;
 			for( nSY1=(nX + nBPW * nY), nEY1=(nSY1 + nBPW * nH); nSY1<nEY1; nSY1+=nBPW ) {
@@ -268,7 +269,7 @@ void EFC_fntSetBUFF( sint32 nOFFSET, sint32 nX, sint32 nY, sint32 nW, sint32 nH,
 
 	nOFFSET += 8;
 
-	nBPL = EFC_GRP_GET_FRAME_BUFFER_BPL( (FontData.nW + 2), PixelData.nBPP );
+	nBPL = g_legacyDrawer.GetBplWithWidth( (FontData.nW + 2), PixelData.nBPP );
 	nBPW = nBPL / (PixelData.nBPP >> 3);
 	nWH = nW * nH;
 
@@ -276,7 +277,7 @@ void EFC_fntSetBUFF( sint32 nOFFSET, sint32 nX, sint32 nY, sint32 nW, sint32 nH,
 		uint16 *pDATA;
 		uint16 nCOLOR;
 
-		pDATA = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( FontData.hBack );
+		pDATA = (uint16 *)g_legacyDrawer.GetFrameBuffer( FontData.hBack );
 		nCOLOR = RGB32RGB16( RGB_R(nRGB), RGB_G(nRGB), RGB_B(nRGB) );
 
 		switch( FontData.nBOLD ) {
@@ -335,13 +336,13 @@ void EFC_fntDrawBUFF( sint32 nX, sint32 nY, sint32 nW, sint32 nANCHOR )
 	EFC_grpGetANCHOR( &rt, nX, nY, nW, FontData.nH, nANCHOR );
 	switch( FontData.nBOLD ) {
 	case EN_BOLD_NONE:
-		EFC_grpCopyFRAME( rt.nX, rt.nY, rt.nW, rt.nH, &FontData.hBack, 1, 1, TRUE );
+		EFC_grpCopyFRAME( rt.nX, rt.nY, rt.nW, rt.nH, FontData.hBack, 1, 1, TRUE );
 		break;
 	case EN_BOLD_ALL :
-		EFC_grpCopyFRAME( rt.nX - 1, rt.nY - 1, rt.nW + 2, rt.nH + 2, &FontData.hBack, 0, 0, TRUE );
+		EFC_grpCopyFRAME( rt.nX - 1, rt.nY - 1, rt.nW + 2, rt.nH + 2, FontData.hBack, 0, 0, TRUE );
 		break;
 	case EN_BOLD_WIDTH :
-		EFC_grpCopyFRAME( rt.nX, rt.nY, rt.nW + 1, rt.nH, &FontData.hBack, 1, 1, TRUE );
+		EFC_grpCopyFRAME( rt.nX, rt.nY, rt.nW + 1, rt.nH, FontData.hBack, 1, 1, TRUE );
 		break;
 	}
 }

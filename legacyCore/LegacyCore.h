@@ -150,30 +150,6 @@ typedef struct _EXTimer
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Graphicis
-
-#define MC_GRP_GET_FRAME_BUFFER_POINTER(a) ((M_Int32*)MC_GETDPTR(((struct _EX_GrpFrameBuffer*)MC_GETDPTR(a))->frameBufID))
-#define MC_GRP_GET_FRAME_BUFFER_WIDTH(a) ((struct _EX_GrpFrameBuffer *)MC_GETDPTR(a))->w
-#define MC_GRP_GET_FRAME_BUFFER_HEIGHT(a) ((struct _EX_GrpFrameBuffer *)MC_GETDPTR(a))->h
-#define MC_GRP_GET_FRAME_BUFFER_BPL(a) (((struct _EX_GrpFrameBuffer *)MC_GETDPTR(a)))->bpl
-#define MC_GRP_GET_FRAME_BUFFER_BPP(a) ((struct _EX_GrpFrameBuffer *)MC_GETDPTR(a))->bpp
-#define MC_GRP_GET_FRAME_BUFFER_ID(a) (((struct _EX_GrpFrameBuffer *)MC_GETDPTR(a)))->frameBufID
-
-#define MC_GETDPTR(indirectPtr)	(*(void**)indirectPtr)
-
-
-#define EFC_GRP_GET_IMAGE_BUFFER(a) (((struct _MC_GrpImage *)MC_GETDPTR(a))->img)
-#define EFC_GRP_GET_MASK_BUFFER(a) (((struct _MC_GrpImage *)MC_GETDPTR(a))->mask)
-
-#define EFC_GRP_GET_FRAME_BUFFER_BPP(a) MC_GRP_GET_FRAME_BUFFER_BPP(a)
-#define EFC_GRP_GET_FRAME_BUFFER_BPL(w,bpp) (((w) * (bpp) + 7) >> 3)
-
-#define EFC_GRP_GET_FRAME_BUFFER_WIDTH MC_GRP_GET_FRAME_BUFFER_WIDTH
-#define EFC_GRP_GET_FRAME_BUFFER_HEIGHT MC_GRP_GET_FRAME_BUFFER_HEIGHT
-#define EFC_GRP_GET_FRAME_BUFFER_POINTER MC_GRP_GET_FRAME_BUFFER_POINTER
-
-#define GETDATA	MC_GETDPTR
-
-
 typedef M_Int32(*MC_GrpPixelOpProc)(M_Int32 srcpxl, M_Int32 orgpxl, M_Int32 param1);
 
 typedef struct _MC_GrpContext
@@ -186,29 +162,32 @@ typedef struct _MC_GrpContext
 } MC_GrpContext;
 
 
-struct _EX_GrpFrameBuffer
+typedef struct _MC_GrpFrameBuffer
 {
 	M_Int32 w;
 	M_Int32 h;
 	M_Int32 bpl;
 	M_Int32 bpp;
 	M_Int32 frameBufID;
-};
-typedef M_Int32 MC_GrpFrameBuffer;
 
+	LPEXBUFF buffer;
 
-struct _MC_GrpImage
+} MC_GrpFrameBuffer;
+
+/*
+typedef struct _MC_GrpImage
 {
 	MC_GrpFrameBuffer img;
-};
-typedef M_Int32 MC_GrpImage;
+	MC_GrpFrameBuffer mask;
 
+} MC_GrpImage;
+*/
 
-extern MC_GrpFrameBuffer MC_grpCreateOffScreenFrameBuffer(M_Int32 w, M_Int32 h);
-extern void MC_grpDestroyOffScreenFrameBuffer(MC_GrpFrameBuffer fb);
-extern MC_GrpFrameBuffer MC_grpGetScreenFrameBuffer(M_Int32 s);
+extern M_Int32 MC_grpCreateOffScreenFrameBuffer(M_Int32 w, M_Int32 h);
+extern void MC_grpDestroyOffScreenFrameBuffer(M_Int32 fb);
+extern M_Int32 MC_grpGetScreenFrameBuffer(M_Int32 s);
 extern void MC_grpInitContext(MC_GrpContext* pgc);
-extern void MC_grpFlushLcd(M_Int32 i, MC_GrpFrameBuffer frm, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h);
+extern void MC_grpFlushLcd(M_Int32 i, M_Int32 frm, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h);
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
