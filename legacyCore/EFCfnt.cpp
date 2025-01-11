@@ -1,17 +1,17 @@
 #include "LegacyCore.h"
 #include "LegacyDrawer.h"
 #include "BinaryParser.h"
+#include "LegacyFilterProcs.h"
+#include "ResourceManager.h"
 
 #include "EFCgrp.h"
 #include "EFCfnt.h"
-#include "EFCpixel.h"
 
 
-#include "ResourceManager.h"
 
 EXFONTDATA FontData;
 
-void EFC_fntInitialize( void )
+void EFC_fntInitialize( )
 {
 	EXFILE xFile;
 
@@ -68,7 +68,7 @@ void EFC_fntInitialize( void )
 	FontData.nEnBytes = (sint16)WIDTH_HEIGHT_BIT_BYTES( FontData.rtEN.nW, FontData.rtEN.nH );
 	FontData.nHanBytes = (sint16)WIDTH_HEIGHT_BIT_BYTES( FontData.rtHAN.nW, FontData.rtHAN.nH );
 
-	FontData.hBack = MC_grpCreateOffScreenFrameBuffer( FontData.nW + 2, FontData.nH + 2 );
+	FontData.hBack = g_legacyDrawer.CreateOffScreenBuffer( FontData.nW + 2, FontData.nH + 2 );
 	
 	//MemData.bLOCK = TRUE;
 
@@ -88,7 +88,7 @@ void EFC_fntInitialize( void )
 void EFC_fntFinalize( void )
 {
 	if( FontData.hBack != 0 ) {
-		MC_grpDestroyOffScreenFrameBuffer( FontData.hBack );
+		g_legacyDrawer.ReleaseOffScreenBuffer(FontData.hBack);
 		//MemData.bLOCK = TRUE;
 	}
 
@@ -234,13 +234,13 @@ void EFC_fntInitFillRect(sint32 hBack, sint32 nX, sint32 nY, sint32 nW, sint32 n
 	sint32 nWIDTH, nBPL, nBPW;
 	
 	nWIDTH = g_legacyDrawer.GetFrameWidth( hBack );
-	nBPL = g_legacyDrawer.GetBplWithWidth( nWIDTH, PixelData.nBPP );
+	nBPL = g_legacyDrawer.GetBplWithWidth_PlusNumber7( nWIDTH, PixelData.nBPP );
 	nBPW = nBPL / (PixelData.nBPP >> 3);
 
 	{
 		uint16 *pDATA, nCOLOR;
 
-		nCOLOR = (uint16)PixelData.nTRANS;
+		nCOLOR = (uint16)PixelProcData.nTRANS;
 		pDATA = (uint16 *)g_legacyDrawer.GetFrameBuffer( hBack );
 		{
 			sint32 nSX1, nEX1, nSY1, nEY1;
@@ -268,7 +268,7 @@ void EFC_fntSetBUFF( sint32 nOFFSET, sint32 nX, sint32 nY, sint32 nW, sint32 nH,
 
 	nOFFSET += 8;
 
-	nBPL = g_legacyDrawer.GetBplWithWidth( (FontData.nW + 2), PixelData.nBPP );
+	nBPL = g_legacyDrawer.GetBplWithWidth_PlusNumber7( (FontData.nW + 2), PixelData.nBPP );
 	nBPW = nBPL / (PixelData.nBPP >> 3);
 	nWH = nW * nH;
 

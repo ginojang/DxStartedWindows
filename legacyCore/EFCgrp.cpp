@@ -1,17 +1,13 @@
 #include "LegacyCore.h"
 #include "LegacyDrawer.h"
+#include "LegacyFilterProcs.h"
 
 #include "EFCgrp.h"
-#include "EFCpixel.h"
 #include "EFCimg.h"
 
 
 void EFC_grpInitialize( void )
 {
-	EFC_grpSetFRAME( PixelData.hScreen );
-
-	//EFC_grpSetRGB( RGB(255, 255, 255) );
-	//EFC_grpFillSCREEN();
 }
 
 void EFC_grpFinalize( void )
@@ -20,100 +16,14 @@ void EFC_grpFinalize( void )
 
 
 //	Screen Orientation
-void EFC_grpSetScreenOrientation(ScreenOrientation nMode)
+void EFC_grpSetScreen()
 {
-	if(PixelData.nScreenOrientation != nMode)
-	{
-		PixelData.nScreenOrientation = nMode;
-
-		if (PixelData.hLandScapeScreen)
-		{
-			MC_grpDestroyOffScreenFrameBuffer(PixelData.hLandScapeScreen);
-		}
-
-		if (EFC_grpGetOrientationMode() == SCREEN_ORIENTATION_LANDSCAPE)
-		{//가로모드일 경우 뒤집어 준다.			
-
-			if (PixelData.rtREAL.nW == 480 && PixelData.rtREAL.nH == 800)
-			{
-				PixelData.rtMAIN.nW = (sint16)PixelData.rtREAL.nH/2;
-				PixelData.rtMAIN.nH = (sint16)PixelData.rtREAL.nW/2;
-
-				PixelData.hLandScapeScreen = MC_grpCreateOffScreenFrameBuffer( PixelData.rtREAL.nW/2, PixelData.rtREAL.nH/2 );
-				PixelData.hScreen = MC_grpCreateOffScreenFrameBuffer( PixelData.rtMAIN.nW, PixelData.rtMAIN.nH );
-			}
-			else
-			{
-				PixelData.rtMAIN.nW = (sint16)PixelData.rtREAL.nH;
-				PixelData.rtMAIN.nH = (sint16)PixelData.rtREAL.nW;
-
-				PixelData.hLandScapeScreen = MC_grpCreateOffScreenFrameBuffer( PixelData.rtREAL.nW, PixelData.rtREAL.nH );
-				PixelData.hScreen = MC_grpCreateOffScreenFrameBuffer( PixelData.rtMAIN.nW, PixelData.rtMAIN.nH );
-			}
-			
-			
-
-			/*
-			PixelData.hLandScapeScreen = MC_grpCreateOffScreenFrameBuffer( PixelData.rtREAL.nW, PixelData.rtREAL.nH );
-			PixelData.rtMAIN.nW = (sint16)PixelData.rtREAL.nH;
-			PixelData.rtMAIN.nH = (sint16)PixelData.rtREAL.nW;
-			PixelData.hScreen = MC_grpCreateOffScreenFrameBuffer( PixelData.rtREAL.nH, PixelData.rtREAL.nW );
-			*/
-		} 
-		else
-		{
-			if (PixelData.rtREAL.nW == 480 && PixelData.rtREAL.nH == 800)
-			{
-				PixelData.rtMAIN.nW = (sint16)PixelData.rtREAL.nW/2;
-				PixelData.rtMAIN.nH = (sint16)PixelData.rtREAL.nH/2;
-			}
-			else
-			{
-				PixelData.rtMAIN.nW = (sint16)PixelData.rtREAL.nW;
-				PixelData.rtMAIN.nH = (sint16)PixelData.rtREAL.nH;
-			}
-			
-			PixelData.hScreen = MC_grpCreateOffScreenFrameBuffer( PixelData.rtMAIN.nW, PixelData.rtMAIN.nH );
-		}
-
-		PixelData.nBPP = g_legacyDrawer.GetFrameBpp( PixelData.hScreen );	
-
-		PixelData.rtCLIP.nW = PixelData.rtMAIN.nW;
-		PixelData.rtCLIP.nH = PixelData.rtMAIN.nH;
-
-		LCD_W	= PixelData.rtMAIN.nW;
-		LCD_H	= PixelData.rtMAIN.nH;
-
-		stdX	= ((LCD_W)>>1);
-		stdY	= ((LCD_H)>>1);
-		midX	= (LCD_W>>1);
-		midY	= (LCD_H>>1);
-
-		if (EFC_grpGetOrientationMode() == SCREEN_ORIENTATION_LANDSCAPE)
-		{
-			menuX	= (LCD_W - 240)/2+40;
-			menuY	= (LCD_H - 240)/2;
-		}
-		else 
-		{
-			menuX	= 0;
-			menuY	= (LCD_H - 240)/2+20;
-		}
-	}
+	
 }
-sint8 EFC_grpGetOrientationMode()
-{
-	return PixelData.nScreenOrientation;
-}
+
 
 void EFC_grpTransformMousePos(LPEXPOINT pPoint)
 {
-	if(EFC_grpGetOrientationMode() == SCREEN_ORIENTATION_LANDSCAPE){
-		sint32 nX = pPoint->nX;
-		sint32 nY = pPoint->nY;
-		pPoint->nX = nY;
-		pPoint->nY = (g_legacyDrawer.GetFrameWidth(PixelData.hLandScapeScreen)-1)-nX;
-	}
 }
 
 void EFC_grpFLUSH( void )
@@ -203,10 +113,6 @@ void EFC_grpCopyFRAME( sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hFrame
 {
 	EXREGION rgn;
 
-	if( EFC_grpIsMAIN(hFrame) == TRUE ) {
-		nSy += PixelData.nANNUN;
-	}
-
 	EFC_rgnSetREGION( &rgn, nX, nY, nW, nH, nSx, nSy );
 	if( EFC_rgnRealREGION( &rgn, EN_MIRROR_NONE ) == FALSE ) {
 		return;
@@ -219,10 +125,6 @@ void EFC_grpCopyBUFF( sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hFrame,
 {
 	EXREGION rgn;
 	sint32 nX1, nY1, nX2, nY2;
-
-	if( EFC_grpIsMAIN(hFrame) == TRUE ) {
-		nSy += PixelData.nANNUN;
-	}
 
 	EFC_rgnSetREGION( &rgn, nX, nY, nW, nH, 0, 0 );
 	if( EFC_rgnRealREGION( &rgn, EN_MIRROR_NONE ) == FALSE ) {
@@ -246,23 +148,6 @@ void EFC_grpSetCLIP( sint32 nX, sint32 nY, sint32 nW, sint32 nH )
 	}
 }
 
-void EFC_grpSetLOCK( sint32 nLOCK )
-{
-	if( nLOCK == 0 ) {
-		if( PixelData.nLOCK > 0 ) {
-			PixelData.nLOCK--;
-		} else {
-			PixelData.nLOCK = 0;
-		}
-	} else {
-		if( PixelData.nLOCK < 1 ) {
-			PixelData.nLOCK = 1;
-		} else {
-			PixelData.nLOCK++;
-		}
-	}
-}
-
 void EFC_grpSetTRANS( sint32 nX, sint32 nY )
 {
 	EFC_rgnSetPOINT( &PixelData.ptTRANS, nX, nY );
@@ -270,78 +155,74 @@ void EFC_grpSetTRANS( sint32 nX, sint32 nY )
 
 void EFC_grpSetCOLOR( sint32 nCOLOR )
 {
-	PixelData.nCOLOR = nCOLOR;
+	PixelProcData.nCOLOR = nCOLOR;
 }
 
 void EFC_grpSetRGB( sint32 nRGB )
 {
-	PixelData.nCOLOR = RGB32RGB16( RGB_R(nRGB), RGB_G(nRGB), RGB_B(nRGB) );
+	PixelProcData.nCOLOR = RGB32RGB16( RGB_R(nRGB), RGB_G(nRGB), RGB_B(nRGB) );
 }
 
 void EFC_grpInitMODE( void )
 {
-	PixelData.nMODE = EN_MODE_NORMAL;
-	PixelData.nEFF = 0;
+	PixelProcData.nMODE = EN_MODE_NORMAL;
+	PixelProcData.nEFF = 0;
 
 	EFC_grpSetCLIP( PixelData.rtCLIP.nX, PixelData.rtCLIP.nY, PixelData.rtCLIP.nW, PixelData.rtCLIP.nH );
 }
 
 void EFC_grpSetMODE( sint32 nMODE, sint32 nEFF )
 {
-	if( PixelData.nLOCK > 0 ) {
-		return;
-	}
-
 	if( (nMODE > 0) && (nMODE < EN_MODE_LAST) ) {
-		PixelData.nMODE = (uint8)nMODE;
+		PixelProcData.nMODE = (uint8)nMODE;
 		switch( nMODE ) {
 		case EN_MODE_ONE :
-			PixelData.nEFF = RGB32RGB16( RGB_R(nEFF), RGB_G(nEFF), RGB_B(nEFF) );
+			PixelProcData.nEFF = RGB32RGB16( RGB_R(nEFF), RGB_G(nEFF), RGB_B(nEFF) );
 			break;
 		case EN_MODE_BRIGHT :
-			PixelData.nRGB2[0] = MIN_CALC( MAX_CALC(0, nEFF), 256 );
-			PixelData.nRGB2[1] = MIN_CALC( MAX_CALC(0, nEFF), 256 );
-			PixelData.nRGB2[2] = MIN_CALC( MAX_CALC(0, nEFF), 256 );
+			PixelProcData.nRGB2[0] = MIN_CALC( MAX_CALC(0, nEFF), 256 );
+			PixelProcData.nRGB2[1] = MIN_CALC( MAX_CALC(0, nEFF), 256 );
+			PixelProcData.nRGB2[2] = MIN_CALC( MAX_CALC(0, nEFF), 256 );
 
-			if( (PixelData.nRGB2[0] == 0) && (PixelData.nRGB2[1] == 0) && (PixelData.nRGB2[2] == 0) ) {
+			if( (PixelProcData.nRGB2[0] == 0) && (PixelProcData.nRGB2[1] == 0) && (PixelProcData.nRGB2[2] == 0) ) {
 				EFC_grpSetMODE( EN_MODE_NORMAL, 0 );
-			} else if( (PixelData.nRGB2[0] == 256) && (PixelData.nRGB2[1] == 256) && (PixelData.nRGB2[2] == 256) ) {
+			} else if( (PixelProcData.nRGB2[0] == 256) && (PixelProcData.nRGB2[1] == 256) && (PixelProcData.nRGB2[2] == 256) ) {
 				EFC_grpSetMODE(EN_MODE_ONE, 0xFFFFFF);// RGB_WHITE );
 			}
 
 			break;
 		case EN_MODE_DARK :
-			PixelData.nRGB2[0] = MIN_CALC( MAX_CALC(0, nEFF), 256 );
-			PixelData.nRGB2[1] = MIN_CALC( MAX_CALC(0, nEFF), 256 );
-			PixelData.nRGB2[2] = MIN_CALC( MAX_CALC(0, nEFF), 256 );
+			PixelProcData.nRGB2[0] = MIN_CALC( MAX_CALC(0, nEFF), 256 );
+			PixelProcData.nRGB2[1] = MIN_CALC( MAX_CALC(0, nEFF), 256 );
+			PixelProcData.nRGB2[2] = MIN_CALC( MAX_CALC(0, nEFF), 256 );
 
-			if( (PixelData.nRGB2[0] == 0) && (PixelData.nRGB2[1] == 0) && (PixelData.nRGB2[2] == 0) ) {
+			if( (PixelProcData.nRGB2[0] == 0) && (PixelProcData.nRGB2[1] == 0) && (PixelProcData.nRGB2[2] == 0) ) {
 				EFC_grpSetMODE( EN_MODE_NORMAL, 0 );
-			} else if( (PixelData.nRGB2[0] == 256) && (PixelData.nRGB2[1] == 256) && (PixelData.nRGB2[2] == 256) ) {
+			} else if( (PixelProcData.nRGB2[0] == 256) && (PixelProcData.nRGB2[1] == 256) && (PixelProcData.nRGB2[2] == 256) ) {
 				EFC_grpSetMODE(EN_MODE_ONE, 0);// RGB_BLACK );
 			}
 			break;
 		case EN_MODE_ALPHA :
-			PixelData.nEFF = (uint16)(RANGE_CALC( nEFF, 0, 255 ));
-			switch( PixelData.nEFF ) {				
+			PixelProcData.nEFF = (uint16)(RANGE_CALC( nEFF, 0, 255 ));
+			switch(PixelProcData.nEFF ) {
 			case 32:
 			case 48 :
 			case 64 :
 			case 80 :
 			case 96 :
-				PixelData.nEFF = ((PixelData.nEFF - 32)>>4);
+				PixelProcData.nEFF = ((PixelProcData.nEFF - 32)>>4);
 				EFC_grpSetMODE( EN_MODE_ALPHA_ETC, 0 );
 				break;
 			case 144 :
-				PixelData.nEFF = 5;
+				PixelProcData.nEFF = 5;
 				EFC_grpSetMODE( EN_MODE_ALPHA_ETC, 0 );
 				break;
 			case 160 :
-				PixelData.nEFF = 6;
+				PixelProcData.nEFF = 6;
 				EFC_grpSetMODE( EN_MODE_ALPHA_ETC, 0 );
 				break;
 			case 192 :			
-				PixelData.nEFF = 7;
+				PixelProcData.nEFF = 7;
 				EFC_grpSetMODE( EN_MODE_ALPHA_ETC, 0 );
 				break;
 			case 112 :
@@ -356,13 +237,13 @@ void EFC_grpSetMODE( sint32 nMODE, sint32 nEFF )
 			}
 			break;
 		case EN_MODE_GRAY :
-			PixelData.nEFF = RGB32RGB16( RGB_R(nEFF), RGB_G(nEFF), RGB_B(nEFF) );
+			PixelProcData.nEFF = RGB32RGB16( RGB_R(nEFF), RGB_G(nEFF), RGB_B(nEFF) );
 			break;
 		case EN_MODE_GRAYGRADE :
-			PixelData.nEFF = (uint16)RANGE_CALC( nEFF, 0, 256 );
-			if( PixelData.nEFF == 0 ) {
+			PixelProcData.nEFF = (uint16)RANGE_CALC( nEFF, 0, 256 );
+			if(PixelProcData.nEFF == 0 ) {
 				EFC_grpSetMODE( EN_MODE_NORMAL, 0 );
-			} else if( PixelData.nEFF == 256 ) {
+			} else if(PixelProcData.nEFF == 256 ) {
 				EFC_grpSetMODE( EN_MODE_GRAY, 0 );
 			}
 			break;
@@ -1170,7 +1051,7 @@ void EFC_grpFillBLUR(sint32 hFrame)
 	nW = g_legacyDrawer.GetFrameWidth(hFrame);
 	nH = g_legacyDrawer.GetFrameHeight(hFrame);
 	
-	nBPL = g_legacyDrawer.GetBplWithWidth( nW, PixelData.nBPP );
+	nBPL = g_legacyDrawer.GetBplWithWidth_PlusNumber7( nW, PixelData.nBPP );
 	nBPW = nBPL / (PixelData.nBPP >> 3);
 
 	{

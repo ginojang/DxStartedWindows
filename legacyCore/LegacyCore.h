@@ -164,15 +164,90 @@ typedef struct tagEXREGION {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Graphicis
+// 
+/////////////////////////////////////////////////////////
+// CALC
+#define CONVERT_INT(fp, a)	(fp[a]|(fp[a+1]<<8)|(fp[a+2]<<16)|(fp[a+3]<<24));
+#define RGB32RGB16(r,g,b) ((uint16)((((r) >> 3) << 11) | (((g) >> 2) << 5) | ((b) >> 3)))
+#define ABS32(a) (((a) < 0) ? -(a) : (a))
+#define MIN_CALC(a,b) (((a) < (b)) ? (a) : (b))
+#define MAX_CALC(a,b) (((a) > (b)) ? (a) : (b))
+#define RANGE_CALC(a,min,max) ((a) < (min) ? (min) : ((a) > (max) ?(max):(a)))  //MIN_CALC(MAX_CALC((a),(min)), (max))
+#define WIDTH_BYTES(w) ((((w) + 3) >> 2) << 2)
+#define WIDTH_HEIGHT_BIT_BYTES(w,h) (((w) * (h) + 7) >> 3)
+#define BIT_SET1(a,n) ((a) | (0x1 << (n)))
+#define BIT_SET0(a,n) ((a) ^ ~(0x1 << (n)))
+/////////////////////////////////////////////////////////
 
-/*
-typedef struct _MC_GrpImage
+/////////////////////////////////////////////////////////
+// RGB32
+#define RGB8_MAX 0x000000FF
+
+#ifdef RGB
+#undef RGB
+#endif
+#define RGB(r,g,b) ( ((r) << 16) | ((g) << 8) | (b) )
+
+#define RGB_R(c) ( ((c) >> 16) & RGB8_MAX )
+#define RGB_G(c) ( ((c) >> 8) & RGB8_MAX )
+#define RGB_B(c) ( (c) & RGB8_MAX )
+
+#define RGB_NONE (0xffffffffl)
+/////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////
+// RGB16
+#define RGB5_MAX 0x0000001F
+#define RGB6_MAX 0x0000003F
+
+#define R16_MAX 0x0000F800
+#define G16_MAX 0x000007E0
+#define B16_MAX 0x0000001F
+
+#define RGB16_R(c) ( ((c) >> 11) & RGB5_MAX )
+#define RGB16_G(c) ( ((c) >> 5) & RGB6_MAX )
+#define RGB16_B(c) ( (c) & RGB5_MAX )
+
+#define RGB16(r,g,b) ( ((r) << 11) | ((g) << 5) | (b) )
+
+#define COLOR16_R(c) ( (c) & R16_MAX )
+#define COLOR16_G(c) ( (c) & G16_MAX )
+#define COLOR16_B(c) ( (c) & B16_MAX )
+
+#define COLOR16(r,g,b) ( (r) | (g) | (b) )
+
+
+
+//
+
+typedef struct tagPIXELDATA
 {
-	MC_GrpFrameBuffer img;
-	MC_GrpFrameBuffer mask;
+	sint32	hReal;
+	sint32	hScreen;
+	sint32  hFrame;
 
-} MC_GrpImage;
-*/
+	//MC_GrpContext		hGC;
+
+	/////////////////////////////////////
+	// PIXEL
+
+
+	//uint8				nMODE;
+	//uint16				nEFF;
+	//sint32				nCALC;
+	/////////////////////////////////////
+
+	uint8				nBPP;
+	EXRECT				rtMAIN; // 화면 RECT
+	EXRECT				rtREAL; // 화면 RECT
+
+	ubool				bFULL;
+
+	EXPOINT				ptTRANS;	// 이동 좌표 POINT
+	EXRECT				rtCLIP;		// 클리핑 RECT
+
+} PIXELDATA, * LPPIXELDATA;
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

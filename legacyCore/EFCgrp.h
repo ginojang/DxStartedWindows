@@ -23,6 +23,7 @@
 		SCREEN_ORIENTATION_PORTRAIT = 0,
 		SCREEN_ORIENTATION_LANDSCAPE,
 		SCREEN_ORIENTATION_KIND
+
 	}ScreenOrientation;
 
 	typedef struct tagEXMOVE {
@@ -31,8 +32,7 @@
 
 	extern void EFC_grpInitialize( void );
 	extern void EFC_grpFinalize( void );
-	extern void EFC_grpSetScreenOrientation(ScreenOrientation nMode);
-	extern sint8 EFC_grpGetOrientationMode(void);
+	extern void EFC_grpSetScreen();
 	extern void EFC_grpTransformMousePos(LPEXPOINT pPoint);
 	extern void EFC_grpFLUSH( void );
 
@@ -45,7 +45,6 @@
 	extern void EFC_grpCopyBUFF( sint32 nX, sint32 nY, sint32 nW, sint32 nH, sint32 hFrame, sint32 nSx, sint32 nSy, sint32 nEx, sint32 nEy, ubool bTRANS );
 
 	extern void EFC_grpSetCLIP( sint32 nX, sint32 nY, sint32 nW, sint32 nH );
-	extern void EFC_grpSetLOCK( sint32 nLOCK );
 	extern void EFC_grpSetTRANS( sint32 nX, sint32 nY );
 	extern void EFC_grpSetCOLOR( sint32 nCOLOR );
 	extern void EFC_grpSetRGB( sint32 nRGB );
@@ -54,7 +53,6 @@
 	extern void EFC_grpSetMODE( sint32 nMODE, sint32 nEFF );
 	extern void EFC_grpReset( void );
 
-	extern void EFC_grpSetGRADE( sint32 nR, sint32 nG, sint32 nB );
 
 	// DRAW
 	extern void EFC_grpDrawPIXEL( sint32 nX, sint32 nY );

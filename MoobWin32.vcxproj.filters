@@ -31,9 +31,6 @@
     <ClInclude Include="legacyCore\EFCmain.h">
       <Filter>legacyCore</Filter>
     </ClInclude>
-    <ClInclude Include="legacyCore\EFCpixel.h">
-      <Filter>legacyCore</Filter>
-    </ClInclude>
     <ClInclude Include="legacyCore\Inflater3.h">
       <Filter>legacyCore</Filter>
     </ClInclude>
@@ -67,6 +64,9 @@
     <ClInclude Include="legacyCore\BinaryParser.h">
       <Filter>legacyCore</Filter>
     </ClInclude>
+    <ClInclude Include="legacyCore\LegacyFilterProcs.h">
+      <Filter>legacyCore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MoobWin32.rc">
@@ -86,9 +86,6 @@
       <Filter>Win32</Filter>
     </ClCompile>
     <ClCompile Include="legacyCore\EFCmain.cpp">
-      <Filter>legacyCore</Filter>
-    </ClCompile>
-    <ClCompile Include="legacyCore\EFCpixel.cpp">
       <Filter>legacyCore</Filter>
     </ClCompile>
     <ClCompile Include="legacyCore\Inflater3.cpp">
@@ -119,6 +116,9 @@
       <Filter>legacyCore</Filter>
     </ClCompile>
     <ClCompile Include="legacyCore\BinaryParser.cpp">
+      <Filter>legacyCore</Filter>
+    </ClCompile>
+    <ClCompile Include="legacyCore\LegacyFilterProcs.cpp">
       <Filter>legacyCore</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,7 +4,6 @@
 #include "EFCmain.h"
 
 #include "EFCkey.h"
-#include "EFCpixel.h"
 #include "EFCgrp.h"
 #include "EFCfnt.h"
 
@@ -19,13 +18,11 @@ void EFC_mainInitialize( void )
 	MainData.isDebugDraw = FALSE;
 
 	//
-	EFC_pxlInitialize();
+	
 	//
 #if _CHECK
 	EFC_lnkInitialize();
 #endif
-
-	EFC_grpInitialize();
 	EFC_keyInitialize();
 }
 
@@ -42,11 +39,6 @@ void EFC_mainFinalize( void )
 	EFC_lnkFinalize();
 #endif
 	//
-	EFC_grpFinalize();
-	//
-	
-	EFC_pxlFinalize();
-	
 }
 
 void EFC_mainPAUSE( void )
@@ -145,87 +137,6 @@ void EFC_mainSetNEXT( sint32 nNEXT )
 #endif
 }
 
-/*
-void EFC_mainFLUSH( void )
-{
-#if defined( USE_TOUCH_ROTATE )
-	{
-		sint32 i, j, nW, nH, nSX, nSX1, nSX2;
-		uint16 *pDATA2;
-
-		EFC_mainTouchDRAW();
-
-		pDATA2 = JC_imgGET( &PixelData.imgBACK );
-
-		nW = EFC_GRP_GET_FRAME_BUFFER_WIDTH( PixelData.hScreen );
-		nH = EFC_GRP_GET_FRAME_BUFFER_HEIGHT( PixelData.hScreen );
-
-		if( PixelData.nBPP != 16 ) {
-			uint32 *pDATA1, *pCOLOR;
-			pDATA1 = (uint32 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( PixelData.hScreen );
-			pCOLOR = (uint32 *)JC_memGET( PixelData.pCOLORS );
-			//			for( i=0; i<nH; i++ ) {		// 400
-			//				for( j=0; j<nW; j++ ) {	// 240
-			//					pDATA1[i * nW + j] = pCOLOR[ pDATA2[(nW - 1 - j) * nH + i] ];
-			//				}
-			//			}
-			for( i=0, nSX=0; i<nH; i++, nSX+=nW ) { // 400
-				for( j=0, nSX1=nSX, nSX2=((nW - 1) * nH + i); j<nW; j++, nSX1++, nSX2-=nH ) {	// 240
-					pDATA1[nSX1] = pCOLOR[ pDATA2[nSX2] ];
-				}
-			}
-		} else {
-			uint16 *pDATA1;
-			pDATA1 = (uint16 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( PixelData.hScreen );
-			//			for( i=0; i<nH; i++ ) {		// 400
-			//				for( j=0; j<nW; j++ ) {	// 240
-			//					pDATA1[i * nW + j] = pDATA2[(nW - 1 - j) * nH + i];
-			//				}
-			//			}
-			for( i=0, nSX=0; i<nH; i++, nSX+=nW ) { // 400
-				for( j=0, nSX1=nSX, nSX2=((nW - 1) * nH + i); j<nW; j++, nSX1++, nSX2-=nH ) {	// 240
-					pDATA1[nSX1] = pDATA2[nSX2];
-				}
-			}
-		}
-
-		MC_grpCopyFrameBuffer( PixelData.hReal, 0, PixelData.nANNUN, nW, nH, PixelData.hScreen, 0, PixelData.nANNUN, &PixelData.hGC );
-
-		MC_grpFlushLcd( 0, PixelData.hReal, 0, PixelData.nANNUN, EFC_GRP_GET_FRAME_BUFFER_WIDTH( PixelData.hReal ), EFC_GRP_GET_FRAME_BUFFER_HEIGHT( PixelData.hReal ) );
-		return;
-	}
-
-	// COPY SCREEN FRAME BUFF
-	if( PixelData.nBPP != 16 ) {
-		uint32 *pDATA1;
-		uint16 *pDATA2;
-		uint32 *pCOLOR;
-		sint32 nSX1, nSY1, nSX2, nSY2, nEX1, nEY1;
-
-		pDATA1 = (uint32 *)EFC_GRP_GET_FRAME_BUFFER_POINTER( PixelData.hScreen );
-		pCOLOR = (uint32 *)JC_memGET( PixelData.pCOLORS );
-
-		pDATA2 = JC_imgGET( &PixelData.imgBACK );
-
-		for( nSY1=(PixelData.imgBACK.nW * (PixelData.nANNUN + PixelData.imgBACK.nH - 1)), nEY1=(nSY1 - (PixelData.imgBACK.nW * PixelData.imgBACK.nH)), nSY2=(PixelData.imgBACK.nW * (PixelData.imgBACK.nH - 1)); nSY1>nEY1; nSY1-=PixelData.imgBACK.nW, nSY2-=PixelData.imgBACK.nW ) {
-			for( nSX1=(nSY1 + PixelData.imgBACK.nW - 1), nEX1=(nSY1 - 1), nSX2=(nSY2 + PixelData.imgBACK.nW - 1); nSX1>nEX1; nSX1--, nSX2-- ) {
-				pDATA1[nSX1] = pCOLOR[ pDATA2[nSX2] ];
-			}
-		}
-	}
-
-	// FLUSH LCD
-#if defined( SKT_WIPI )
-	MC_grpFlushLcd( 0, PixelData.hScreen, 0, PixelData.nANNUN, PixelData.imgBACK.nW, PixelData.imgBACK.nH );
-#elif defined( KTF_WIPI )
-	MC_grpFillRect( PixelData.hReal, 0, PixelData.nANNUN, 1, 1, &PixelData.hGC );
-	MC_grpFillRect( PixelData.hReal, PixelData.rtMAIN.nW - 1, PixelData.nANNUN + PixelData.rtMAIN.nH - 1, 1, 1, &PixelData.hGC );
-	MC_grpFlushLcd( 0, PixelData.hScreen, 0, PixelData.nANNUN, PixelData.imgBACK.nW, PixelData.imgBACK.nH );
-#elif defined( LGT_WIPI )
-	MC_grpCopyFrameBuffer( PixelData.hReal, 0, PixelData.nANNUN, PixelData.rtMAIN.nW, PixelData.rtMAIN.nH, PixelData.hScreen, 0, PixelData.nANNUN, &PixelData.hGC );
-	MC_grpFlushLcd( 0, PixelData.hReal, 0, PixelData.nANNUN, PixelData.imgBACK.nW, PixelData.imgBACK.nH );
-#endif
-}*/
 
 void EFC_mainDRAW( void )
 {
@@ -300,7 +211,7 @@ ubool EFC_mainKeyTOUCH( LPEXPOINT pPoint, sint32 nType )
 	for( i=(MainData.xTOUCHKEY.nTOUCHES - 1); i>=0; i-- ) 
 	{
 		pDATA = &MainData.xTOUCHKEY.xDATA[i];
-		if( EFC_rgnIsInRECT( &pDATA->rt, pPoint->nX, (pPoint->nY - PixelData.nANNUN) ) == TRUE
+		if( EFC_rgnIsInRECT( &pDATA->rt, pPoint->nX, pPoint->nY ) == TRUE
 			&& pDATA->nTouchType == nType)
 		{
 			for( j=0; j<pDATA->nKEYS; j++ )

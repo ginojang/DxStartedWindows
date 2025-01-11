@@ -70,38 +70,6 @@ LPEXBUFF ResourceManager::EFC_fsLoadINFLATE(LPEXBUFF pAlloc)
 #endif
 }
 
-#ifdef NATIVE_STAND_ALONE
-void EFC_fsSECURITY(ubyte* pByte, sint32 nSize)
-{
-	int CRC_XOR = 0x97001326;
-
-	uint32 i, nCNT32 = 0, nCNT16 = 0, nCNT8 = 0;
-	uint32* pDATA32;
-	uint16* pDATA16;
-	uint8* pDATA8;
-
-	nCNT32 = nSize / 4;
-	nCNT16 = (nSize - (nCNT32 * 4)) / 2;
-	nCNT8 = (nSize - (nCNT32 * 4)) % 2;
-
-	pDATA32 = (uint32*)pByte;
-	pDATA16 = (uint16*)&pByte[(nCNT32 * 4)];
-	pDATA8 = (uint8*)&pByte[(nCNT32 * 4) + (nCNT16 * 2)];
-
-	for (i = 0; i < nCNT32; i++) {
-		pDATA32[i] = (pDATA32[i] ^ CRC_XOR);
-	}
-
-	for (i = 0; i < nCNT16; i++) {
-		pDATA16[i] = (uint16)(pDATA16[i] ^ CRC_XOR);
-	}
-
-	for (i = 0; i < nCNT8; i++) {
-		pDATA8[i] = (uint8)(pDATA8[i] ^ CRC_XOR);
-	}
-}
-#endif
-
 // public
 EXBUFF* ResourceManager::LoadFromAssets(const char* pszName)
 {
@@ -140,45 +108,6 @@ EXBUFF* ResourceManager::LoadFromAssets(const char* pszName)
 	return NULL;
 #endif
 }
-
-
-// GINO CHECK.
-/*
-LPEXBUFF EFC_fsLoadRES( schar *pszRes )
-{
-	LPEXBUFF pZIPFile;
-	sint32 nSIZE = 0, nRET;
-	schar szRESFileName[1024];
-
-	SPRINTF( szRESFileName, "%s", pszRes );
-
-	// GINO CHECK..  다행히 이 함수에서만 사용된다..
-	nSIZE = g_MXResMan.GetResourceSize( szRESFileName );
-	//nResID = MC_knlGetResourceID( szRES, &nSIZE );
-
-	if( nSIZE <= 0 )
-	{
-		return NULL;
-	}
-
-	pZIPFile = EFC_memALLOC( nSIZE );
-	if( pZIPFile == NULL )
-	{
-		//assert_msg(pALLOC, "EFC_fsLoadRES : 메모리 부족", nSIZE);
-		return NULL;
-	}
-
-	nRET = g_MXResMan.GetResource( szRESFileName, pZIPFile );
-
-	if(nRET <= 0)
-	{
-		//LOGE("");
-		return NULL;
-	}
-	return EFC_fsLoadINFLATE(pZIPFile);
-}
-*/
-
 
 //////////////////////////////////////////////////////////////////////////
 ///  버퍼.
@@ -308,3 +237,38 @@ void EFC_fxtCHANGE(LPEXBUFF pBuff, schar szOld, schar szNew)
 	}
 }
 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// 기존 게임 소스 동작을 하기 위한 - 직접 호출 - 함수 -  
+#ifdef NATIVE_STAND_ALONE
+void EFC_fsSECURITY(ubyte* pByte, sint32 nSize)
+{
+	int CRC_XOR = 0x97001326;
+
+	uint32 i, nCNT32 = 0, nCNT16 = 0, nCNT8 = 0;
+	uint32* pDATA32;
+	uint16* pDATA16;
+	uint8* pDATA8;
+
+	nCNT32 = nSize / 4;
+	nCNT16 = (nSize - (nCNT32 * 4)) / 2;
+	nCNT8 = (nSize - (nCNT32 * 4)) % 2;
+
+	pDATA32 = (uint32*)pByte;
+	pDATA16 = (uint16*)&pByte[(nCNT32 * 4)];
+	pDATA8 = (uint8*)&pByte[(nCNT32 * 4) + (nCNT16 * 2)];
+
+	for (i = 0; i < nCNT32; i++) {
+		pDATA32[i] = (pDATA32[i] ^ CRC_XOR);
+	}
+
+	for (i = 0; i < nCNT16; i++) {
+		pDATA16[i] = (uint16)(pDATA16[i] ^ CRC_XOR);
+	}
+
+	for (i = 0; i < nCNT8; i++) {
+		pDATA8[i] = (uint8)(pDATA8[i] ^ CRC_XOR);
+	}
+}
+#endif

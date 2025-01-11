@@ -46,7 +46,7 @@ extern LoopCore g_loopCore;
 //
 UINT* g_pBuffers = NULL;
 
-int SCREEN_WIDTH = 640;
+int SCREEN_WIDTH = 800;
 int SCREEN_HEIGHT = 480;
 
 int FixedUpdateFrame = 1000 / 20;
