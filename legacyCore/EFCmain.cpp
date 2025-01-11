@@ -4,7 +4,6 @@
 #include "EFCkey.h"
 #include "EFCpixel.h"
 #include "EFCgrp.h"
-#include "EFCfs.h"
 #include "EFCfnt.h"
 
 

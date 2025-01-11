@@ -6,6 +6,8 @@
 
 LegacyDrawer g_legacyDrawer;
 
+
+
 LegacyDrawer::LegacyDrawer()
 {
 

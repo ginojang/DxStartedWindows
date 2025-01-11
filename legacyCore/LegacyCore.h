@@ -230,7 +230,7 @@ typedef struct tagEXIMAGE
 ////////////////////////////////////////////////////////////////////////
 //
 extern M_Int64 MC_knlCurrentTime();
-
+extern LPEXBUFF EFC_fsLoadBUFF(schar* pszFile);
 
 
 

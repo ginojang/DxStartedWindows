@@ -2,6 +2,7 @@
 
 
 #define EXBUFFERS_NUM	(60000)
+#define MAX_ASSET_FOLDERS (20)
 
 
 class ResourceManager
@@ -14,7 +15,9 @@ public:
 public:
 	EXBUFF* LoadFromAssets(const char* pszName);
 
-
+private:
+	int numFolders;
+	char AssetFolders[MAX_ASSET_FOLDERS][128];
 
 // Buffer
 public:

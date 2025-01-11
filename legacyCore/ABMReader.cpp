@@ -1,9 +1,11 @@
 #include "LegacyCore.h"
+#include "BinaryParser.h"
+
 #include "ABMReader.h"
 
 #include "EFCpixel.h"
-#include "EFCfs.h"
 #include "EFCimg.h"
+
 
 sint32 KBitmap_GetSize( sint32 nW, sint32 nH )
 {

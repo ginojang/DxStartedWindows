@@ -4,7 +4,7 @@
 #include "EFCpixel.h"
 #include "EFCgrp.h"
 #include "EFCimg.h"
-#include "EFCfs.h"
+
 
 #if defined( KT_WIPI )
 	WIPIC_SystemAPIs* g_SystemAPIs;

@@ -1,10 +1,9 @@
 #include "LegacyCore.h"
 #include "LegacyDrawer.h"
+#include "BinaryParser.h"
 
 #include "EFCgrp.h"
 #include "EFCfnt.h"
-
-#include "EFCfs.h"
 #include "EFCpixel.h"
 #include "EFCknl.h"
 
